@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: gotika-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gotikaDB
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  security:
+    user:
+      password: "yeat"
+jwt:
+  secret: "EJRNGJKERNHTRHNUI32895734GERGERGERG6BIJ36BNJKL4537I38KJB86HJ34B8HJ3B65JH8B3K8B3KJ8B"  # Секретный ключ для подписи JWT
+  accessToken:
+    expiration: 3600000              # Время жизни access token в миллисекундах (1 час)
+  refreshToken:
+    expiration: 604800000
+
