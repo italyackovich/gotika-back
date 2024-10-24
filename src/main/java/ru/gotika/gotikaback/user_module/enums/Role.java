@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.userModule.entity.user;
+package ru.gotika.gotikaback.user_module.enums;
 
 public enum Role {
     ROLE_ADMIN,

@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.userModule.security.filter;
+package ru.gotika.gotikaback.user_module.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
