@@ -27,12 +27,13 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String extractUsername(String token) {
-        return "";
+        return extractClaim(token, Claims::getSubject);
     }
 
     @Override
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        return null;
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
     }
 
     @Override
@@ -61,13 +62,14 @@ public class JwtServiceImpl implements JwtService {
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignKey())
+                .signWith(getSignKey(), Jwts.SIG.HS256)
                 .compact();
     }
 
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        return false;
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
