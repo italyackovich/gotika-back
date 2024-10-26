@@ -18,14 +18,15 @@ public class Token {
     @GeneratedValue
     private Long id;
 
+    @Column(unique = true)
     private String token;
 
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
 
-    private boolean disabled;
+    private boolean revoked;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
