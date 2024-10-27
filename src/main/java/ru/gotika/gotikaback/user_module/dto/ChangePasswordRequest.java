@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
+public class ChangePasswordRequest {
 
-    private String accessToken;
-    private String refreshToken;
+    private String currentPassword;
+    private String newPassword;
+    private String confirmationPassword;
 }

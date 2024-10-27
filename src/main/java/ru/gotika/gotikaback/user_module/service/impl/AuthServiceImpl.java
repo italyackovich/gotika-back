@@ -34,10 +34,12 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final AuthMapper authMapper;
     private final AuthenticationManager authManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
         User user = userMapper.registerRequestToUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);

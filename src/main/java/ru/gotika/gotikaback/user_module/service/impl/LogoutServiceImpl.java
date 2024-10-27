@@ -30,7 +30,6 @@ public class LogoutServiceImpl implements LogoutService {
         var storedToken = tokenRepository.findByToken(token)
                 .orElse(null);
         if (storedToken != null) {
-            storedToken.setExpired(true);
             storedToken.setRevoked(true);
             tokenRepository.save(storedToken);
             SecurityContextHolder.clearContext();
