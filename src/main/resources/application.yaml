@@ -21,7 +21,7 @@ spring:
 jwt:
   secret: EJRNGJKERNHTRHNUI32895734GERGERGERG6BIJ36BNJKL4537I38KJB86HJ34B8HJ3B65JH8B3K8B3KJ8B # Секретный ключ для подписи JWT
   accessToken:
-    expiration: 30000
+    expiration: 900000
     cookie-name: access
   refreshToken:
     expiration: 604800000
