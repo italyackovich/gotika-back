@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        System.out.println(userMapper.usersToUserDtos(userRepository.findAll()));
         return userMapper.usersToUserDtos(userRepository.findAll());
     }
 
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService {
         userRepository.findById(id).ifPresent(user -> {
             userRepository.save(userMapper.userDtoToUser(userDto));
         });
-        return userMapper.userToUserDto(userRepository.findById(id).orElse(null));
+        return userDto;
     }
 
     @Override

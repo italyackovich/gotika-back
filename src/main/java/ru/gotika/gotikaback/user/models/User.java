@@ -1,10 +1,14 @@
 package ru.gotika.gotikaback.user.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.gotika.gotikaback.order.model.Order;
+import ru.gotika.gotikaback.restaurant.model.Restaurant;
+import ru.gotika.gotikaback.review.model.Review;
 import ru.gotika.gotikaback.user.enums.Role;
 
 import java.util.Collection;
@@ -27,6 +31,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Column(nullable = false)
+    @Email
     private String email;
 
     @Column(nullable = false)
@@ -38,6 +43,16 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     private String address;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

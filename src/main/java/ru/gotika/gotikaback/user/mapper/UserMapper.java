@@ -15,7 +15,6 @@ import java.util.Optional;
 imports = {Role.class})
 public interface UserMapper {
 
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", expression = "java(Role.ROLE_CLIENT)")
     @Mapping(target = "password", ignore = true)

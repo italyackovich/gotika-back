@@ -8,7 +8,6 @@ import ru.gotika.gotikaback.user.models.Token;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
     @Query(value = """
       select t from Token t inner join User u\s
