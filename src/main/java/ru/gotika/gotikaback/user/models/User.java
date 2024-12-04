@@ -45,14 +45,14 @@ public class User implements UserDetails {
     private String address;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
     @OneToMany(mappedBy = "user")
-    private List<Order> orders;
+    private List<Order> orderList;
 
     @OneToMany(mappedBy = "user")
-    private List<Review> reviews;
+    private List<Review> reviewList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

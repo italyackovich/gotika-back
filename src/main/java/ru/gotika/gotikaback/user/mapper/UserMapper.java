@@ -1,8 +1,6 @@
 package ru.gotika.gotikaback.user.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
+import org.mapstruct.*;
 import ru.gotika.gotikaback.user.dto.RegisterRequest;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.enums.Role;
@@ -15,12 +13,8 @@ import java.util.Optional;
 imports = {Role.class})
 public interface UserMapper {
 
-    @Mapping(target = "id", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "role", expression = "java(Role.ROLE_CLIENT)")
-    @Mapping(target = "password", ignore = true)
-    @Mapping(target = "phoneNumber", ignore = true)
-    @Mapping(target = "address", ignore = true)
-    @Mapping(target = "authorities", ignore = true)
     User registerRequestToUser(RegisterRequest request);
 
     UserDto userToUserDto(User user);
