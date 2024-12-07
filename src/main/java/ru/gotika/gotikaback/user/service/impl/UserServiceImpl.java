@@ -8,6 +8,7 @@ import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.enums.Role;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
+import ru.gotika.gotikaback.user.models.CustomUserDetails;
 import ru.gotika.gotikaback.user.models.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
 import ru.gotika.gotikaback.user.service.UserService;
@@ -20,11 +21,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
-    }
 
     @Override
     public List<UserDto> getAllUsers() {

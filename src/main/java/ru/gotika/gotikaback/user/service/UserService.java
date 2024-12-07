@@ -8,7 +8,7 @@ import ru.gotika.gotikaback.user.models.User;
 
 import java.util.List;
 
-public interface UserService extends UserDetailsService {
+public interface UserService {
     List<UserDto> getAllUsers();
     UserDto getUser(Long id);
     UserDto createUser(UserDto userDto);

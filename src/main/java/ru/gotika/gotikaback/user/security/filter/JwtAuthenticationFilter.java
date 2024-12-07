@@ -9,12 +9,12 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.gotika.gotikaback.user.repository.TokenRepository;
 import ru.gotika.gotikaback.user.service.JwtService;
-import ru.gotika.gotikaback.user.service.UserService;
 
 import java.io.IOException;
 
@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //    @Value("${jwt.accessToken.cookie-name}")
 //    private String accessCookieName;
     private final JwtService jwtService;
-    private final UserService userService;
+    private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
 
     @Override
@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userService.loadUserByUsername(userEmail);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             var isTokenValid = tokenRepository.findByToken(jwt)
                     .map(t -> !t.isRevoked())
                     .orElse(false);
