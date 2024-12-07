@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.UserDto;
+import ru.gotika.gotikaback.user.enums.Role;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
+import ru.gotika.gotikaback.user.models.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
 import ru.gotika.gotikaback.user.service.UserService;
 
@@ -35,8 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        userRepository.save(userMapper.userDtoToUser(userDto));
-        return userDto;
+        User user = userMapper.userDtoToUser(userDto);
+        userRepository.save(user);
+        return userMapper.userToUserDto(user);
     }
 
     @Override
@@ -45,6 +49,15 @@ public class UserServiceImpl implements UserService {
             userRepository.save(userMapper.userDtoToUser(userDto));
         });
         return userDto;
+    }
+
+    @Override
+    public UserDto changeRole(Long id, ChangeRoleDto changeRoleDto) {
+        return userRepository.findById(id).map(user -> {
+            user.setRole(changeRoleDto.getRole());
+            userRepository.save(user);
+            return userMapper.userToUserDto(user);
+        }).orElseThrow(null);
     }
 
     @Override

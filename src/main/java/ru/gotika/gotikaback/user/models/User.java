@@ -44,8 +44,8 @@ public class User implements UserDetails {
 
     private String address;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
 
     @OneToMany(mappedBy = "user")

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.gotika.gotikaback.user.dto.ChangePasswordRequest;
+import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.UserDto;
+import ru.gotika.gotikaback.user.enums.Role;
 import ru.gotika.gotikaback.user.service.UserService;
 
 import java.util.List;
@@ -34,6 +36,11 @@ public class UserController {
     @PutMapping("/{id}/put")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id ,@RequestBody UserDto userDto) {
         return ResponseEntity.ok(userService.updateUser(id, userDto));
+    }
+
+    @PatchMapping("/{id}/change-role")
+    public ResponseEntity<UserDto> changeRole(@PathVariable Long id, @RequestBody ChangeRoleDto changeRoleDto) {
+        return ResponseEntity.ok(userService.changeRole(id, changeRoleDto));
     }
 
 //    @PatchMapping("/chpassw")

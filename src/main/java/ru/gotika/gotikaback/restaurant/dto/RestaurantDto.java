@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 import ru.gotika.gotikaback.menu.model.Menu;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.review.model.Review;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.dto.UserDto;
 
-import java.awt.*;
+
 import java.util.List;
 
 @Data
@@ -22,7 +22,7 @@ public class RestaurantDto {
     private String phoneNumber;
     private String openingHours;
     private Menu menu;
-    private List<User> userList;
+    private List<UserDto> userList;
     private List<Order> orderList;
     private List<Review> reviewList;
 }

@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gotika.gotikaback.menu.model.Menu;

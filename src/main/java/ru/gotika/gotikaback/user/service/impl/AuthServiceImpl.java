@@ -75,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void revokeAllUserTokens(User user) {
-        List<Token> validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        List<Token> validUserTokens = tokenRepository.findByUserIdAndRevokedFalse(user.getId());
         if (validUserTokens.isEmpty()) {
             return;
         }

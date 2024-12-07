@@ -18,8 +18,25 @@ spring:
   security:
     user:
       password: yeat
+  mail:
+    host: smtp.mail.ru
+    port: 587
+    username: gotika.no-reply@mail.ru
+    password: vfz82icvRUBzuYNXm8y8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.mail.ru
+  data:
+    redis:
+      host: localhost
+      port: 6379
 jwt:
-  secret: EJRNGJKERNHTRHNUI32895734GERGERGERG6BIJ36BNJKL4537I38KJB86HJ34B8HJ3B65JH8B3K8B3KJ8B
+  secret: ${SECRET_KEY}
   accessToken:
     expiration: 900000
     cookie-name: access
