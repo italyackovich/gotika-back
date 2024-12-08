@@ -2,7 +2,7 @@ package ru.gotika.gotikaback.user.mapper;
 
 import org.mapstruct.*;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
-import ru.gotika.gotikaback.user.dto.RegisterRequest;
+import ru.gotika.gotikaback.auth.dto.RegisterRequest;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.enums.Role;
 import ru.gotika.gotikaback.user.models.User;

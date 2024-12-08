@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.service.impl;
+package ru.gotika.gotikaback.auth.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,21 +7,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.gotika.gotikaback.user.dto.AuthRequest;
-import ru.gotika.gotikaback.user.dto.AuthResponse;
-import ru.gotika.gotikaback.user.dto.RegisterRequest;
-import ru.gotika.gotikaback.user.mapper.AuthMapper;
+import ru.gotika.gotikaback.auth.dto.AuthRequest;
+import ru.gotika.gotikaback.auth.dto.AuthResponse;
+import ru.gotika.gotikaback.auth.dto.RegisterRequest;
+import ru.gotika.gotikaback.auth.mapper.AuthMapper;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
-import ru.gotika.gotikaback.user.models.CustomUserDetails;
-import ru.gotika.gotikaback.user.models.Token;
+import ru.gotika.gotikaback.auth.dto.CustomUserDetails;
+import ru.gotika.gotikaback.auth.model.Token;
 import ru.gotika.gotikaback.user.models.User;
-import ru.gotika.gotikaback.user.repository.TokenRepository;
+import ru.gotika.gotikaback.auth.repository.TokenRepository;
 import ru.gotika.gotikaback.user.repository.UserRepository;
-import ru.gotika.gotikaback.user.service.AuthService;
-import ru.gotika.gotikaback.user.service.JwtService;
+import ru.gotika.gotikaback.auth.service.AuthService;
+import ru.gotika.gotikaback.auth.service.JwtService;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.util;
+package ru.gotika.gotikaback.auth.util;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpCookie;

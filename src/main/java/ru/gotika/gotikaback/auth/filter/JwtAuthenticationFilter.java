@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.security.filter;
+package ru.gotika.gotikaback.auth.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.gotika.gotikaback.user.repository.TokenRepository;
-import ru.gotika.gotikaback.user.service.JwtService;
+import ru.gotika.gotikaback.auth.repository.TokenRepository;
+import ru.gotika.gotikaback.auth.service.JwtService;
 
 import java.io.IOException;
 

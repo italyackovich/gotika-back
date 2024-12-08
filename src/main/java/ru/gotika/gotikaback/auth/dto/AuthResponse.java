@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.dto;
+package ru.gotika.gotikaback.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthRequest {
+public class AuthResponse {
 
-    private String email;
-    private String password;
+    private String accessToken;
+    private String refreshToken;
 }

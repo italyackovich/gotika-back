@@ -1,14 +1,10 @@
 package ru.gotika.gotikaback.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.UserDto;
-import ru.gotika.gotikaback.user.enums.Role;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
-import ru.gotika.gotikaback.user.models.CustomUserDetails;
 import ru.gotika.gotikaback.user.models.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
 import ru.gotika.gotikaback.user.service.UserService;

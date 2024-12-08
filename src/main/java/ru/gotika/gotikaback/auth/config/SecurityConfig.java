@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.security.config;
+package ru.gotika.gotikaback.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import ru.gotika.gotikaback.user.security.filter.JwtAuthenticationFilter;
+import ru.gotika.gotikaback.auth.filter.JwtAuthenticationFilter;
 
 
 @Configuration

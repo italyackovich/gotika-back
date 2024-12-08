@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.security.config;
+package ru.gotika.gotikaback.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.gotika.gotikaback.user.service.UserService;
 
 @Configuration
 @RequiredArgsConstructor

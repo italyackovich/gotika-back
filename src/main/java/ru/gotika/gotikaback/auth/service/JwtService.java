@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.service;
+package ru.gotika.gotikaback.auth.service;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;

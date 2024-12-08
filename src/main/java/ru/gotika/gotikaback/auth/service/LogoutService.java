@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.service;
+package ru.gotika.gotikaback.auth.service;
 
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 

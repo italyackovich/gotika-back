@@ -1,11 +1,12 @@
-package ru.gotika.gotikaback.user.models;
+package ru.gotika.gotikaback.auth.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gotika.gotikaback.user.enums.TokenType;
+import ru.gotika.gotikaback.auth.enums.TokenType;
+import ru.gotika.gotikaback.user.models.User;
 
 @Entity
 @Data

@@ -1,11 +1,11 @@
-package ru.gotika.gotikaback.user.service.impl;
+package ru.gotika.gotikaback.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.gotika.gotikaback.user.models.CustomUserDetails;
+import ru.gotika.gotikaback.auth.dto.CustomUserDetails;
 import ru.gotika.gotikaback.user.models.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
 

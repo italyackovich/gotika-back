@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.service.impl;
+package ru.gotika.gotikaback.auth.service.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.gotika.gotikaback.user.repository.TokenRepository;
-import ru.gotika.gotikaback.user.service.LogoutService;
+import ru.gotika.gotikaback.auth.repository.TokenRepository;
+import ru.gotika.gotikaback.auth.service.LogoutService;
 
 @Service
 @RequiredArgsConstructor

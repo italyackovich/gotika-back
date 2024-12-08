@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.dto;
+package ru.gotika.gotikaback.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

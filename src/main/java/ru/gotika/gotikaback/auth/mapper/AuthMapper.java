@@ -1,8 +1,8 @@
-package ru.gotika.gotikaback.user.mapper;
+package ru.gotika.gotikaback.auth.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
-import ru.gotika.gotikaback.user.dto.AuthResponse;
+import ru.gotika.gotikaback.auth.dto.AuthResponse;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AuthMapper {

@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.controller;
+package ru.gotika.gotikaback.auth.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.gotika.gotikaback.user.dto.AuthRequest;
-import ru.gotika.gotikaback.user.dto.AuthResponse;
-import ru.gotika.gotikaback.user.dto.RegisterRequest;
-import ru.gotika.gotikaback.user.service.AuthService;
+import ru.gotika.gotikaback.auth.dto.AuthRequest;
+import ru.gotika.gotikaback.auth.dto.AuthResponse;
+import ru.gotika.gotikaback.auth.dto.RegisterRequest;
+import ru.gotika.gotikaback.auth.service.AuthService;
 
 import java.io.IOException;
 
