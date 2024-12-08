@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.common.email;
+package ru.gotika.gotikaback.common.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

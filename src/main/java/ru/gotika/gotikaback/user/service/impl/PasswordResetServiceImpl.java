@@ -3,14 +3,11 @@ package ru.gotika.gotikaback.user.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.gotika.gotikaback.common.email.EmailService;
-import ru.gotika.gotikaback.common.redis.CodeStorageService;
+import ru.gotika.gotikaback.common.service.EmailService;
+import ru.gotika.gotikaback.common.service.CodeStorageService;
 import ru.gotika.gotikaback.common.util.CodeGenerator;
-import ru.gotika.gotikaback.user.models.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
 import ru.gotika.gotikaback.user.service.PasswordResetService;
-
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor

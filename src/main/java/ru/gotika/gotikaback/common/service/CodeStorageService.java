@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.common.redis;
+package ru.gotika.gotikaback.common.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
