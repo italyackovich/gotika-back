@@ -21,6 +21,7 @@ public class RestaurantDto {
     private String address;
     private String phoneNumber;
     private String openingHours;
+    private String picture;
     private Menu menu;
     private List<UserDto> userList;
     private List<Order> orderList;

@@ -2,11 +2,12 @@ package ru.gotika.gotikaback.restaurant.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import ru.gotika.gotikaback.common.service.CloudinaryService;
 import ru.gotika.gotikaback.restaurant.dto.RestaurantDto;
 import ru.gotika.gotikaback.restaurant.mapper.RestaurantMapper;
 import ru.gotika.gotikaback.restaurant.repository.RestaurantRepository;
 import ru.gotika.gotikaback.restaurant.service.RestaurantService;
-import ru.gotika.gotikaback.user.models.User;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final RestaurantMapper restaurantMapper;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public List<RestaurantDto> getRestaurants() {
@@ -39,6 +41,16 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurantRepository.save(restaurantMapper.restaurantDtoToRestaurant(restaurantDto));
         });
         return restaurantDto;
+    }
+
+    @Override
+    public RestaurantDto changePicture(Long id, MultipartFile file) {
+        String pictureUrl = cloudinaryService.uploadFile(file);
+        return restaurantRepository.findById(id).map(r -> {
+            r.setPicture(pictureUrl);
+            restaurantRepository.save(r);
+            return restaurantMapper.restaurantToRestaurantDto(r);
+        }).orElseThrow(null);
     }
 
     @Override

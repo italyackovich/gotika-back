@@ -3,6 +3,7 @@ package ru.gotika.gotikaback.restaurant.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.restaurant.dto.RestaurantDto;
 import ru.gotika.gotikaback.restaurant.service.RestaurantService;
 
@@ -35,9 +36,14 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.updateRestaurant(id, restaurantDto));
     }
 
+    @PatchMapping("{id}/change-picture")
+    public ResponseEntity<RestaurantDto> changePicture(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(restaurantService.changePicture(id, file));
+    }
+
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity.BodyBuilder deleteRestaurant(@PathVariable Long id) {
+    public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {
         restaurantService.deleteRestaurant(id);
-        return ResponseEntity.ok();
+        return ResponseEntity.noContent().build();
     }
 }
