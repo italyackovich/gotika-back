@@ -43,3 +43,5 @@ jwt:
   refreshToken:
     expiration: 604800000
     cookie-name: refresh
+cloudinary:
+  url: ${CLOUDINARY_URL}
