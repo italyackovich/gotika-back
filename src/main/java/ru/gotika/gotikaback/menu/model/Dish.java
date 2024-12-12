@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.menu.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gotika.gotikaback.menu.enums.DishCategory;
@@ -16,13 +17,11 @@ public class Dish {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
     private Double price;
 
-    @Column(nullable = false)
     private String imageUrl;
 
     @Column(nullable = false)
@@ -30,10 +29,12 @@ public class Dish {
     private DishCategory category;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
 
     @OneToOne(mappedBy = "dish")
+    @JsonBackReference
     private OrderItem orderItem;
 
 

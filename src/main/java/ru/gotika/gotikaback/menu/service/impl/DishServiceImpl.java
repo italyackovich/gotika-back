@@ -1,0 +1,72 @@
+package ru.gotika.gotikaback.menu.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import ru.gotika.gotikaback.common.service.CloudinaryService;
+import ru.gotika.gotikaback.menu.dto.DishDto;
+import ru.gotika.gotikaback.menu.enums.DishCategory;
+import ru.gotika.gotikaback.menu.mapper.DishMapper;
+
+import ru.gotika.gotikaback.menu.model.Dish;
+import ru.gotika.gotikaback.menu.repository.DishRepository;
+import ru.gotika.gotikaback.menu.service.DishService;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class DishServiceImpl implements DishService {
+
+    private final DishRepository dishRepository;
+    private final DishMapper dishMapper;
+    private final CloudinaryService cloudinaryService;
+
+    @Override
+    public List<DishDto> getAllDishes() {
+        return dishMapper.dishListToDishDtoList(dishRepository.findAll());
+    }
+
+    @Override
+    public DishDto getDishById(long id) {
+        return dishMapper.dishToDishDto(dishRepository.findById(id).orElse(null));
+    }
+
+    @Override
+    public DishDto getDishByName(String name) {
+        return dishMapper.dishToDishDto(dishRepository.findByName(name).orElse(null));
+    }
+
+    @Override
+    public List<DishDto> getDishByCategory(DishCategory category) {
+        return dishMapper.dishListToDishDtoList(dishRepository.findByCategory(category));
+    }
+
+    @Override
+    public DishDto createDish(DishDto dishDto) {
+        Dish dish = dishRepository.save(dishMapper.dishDtoToDish(dishDto));
+        return dishMapper.dishToDishDto(dish);
+    }
+
+    @Override
+    public DishDto updateDish(Long id, DishDto dishDto) {
+        return dishRepository.findById(id).map(dish -> {
+            dishRepository.save(dishMapper.dishDtoToDish(dishDto));
+            return dishDto;
+        }).orElse(null);
+    }
+
+    @Override
+    public void deleteDish(Long id) {
+        dishRepository.deleteById(id);
+    }
+
+    @Override
+    public DishDto changeImage(Long id, MultipartFile image) {
+        return dishRepository.findById(id).map(dish -> {
+            dish.setImageUrl(cloudinaryService.uploadFile(image));
+            dishRepository.save(dish);
+            return dishMapper.dishToDishDto(dish);
+        }).orElse(null);
+    }
+}

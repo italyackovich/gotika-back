@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gotika.gotikaback.menu.enums.DishCategory;
-import ru.gotika.gotikaback.menu.model.Menu;
 import ru.gotika.gotikaback.order.model.OrderItem;
 
 @Data
@@ -18,7 +17,7 @@ public class DishDto {
     private Double price;
     private String imageUrl;
     private DishCategory category;
-    private Menu menu;
+    private Long menuId;
     private OrderItem orderItem;
 
 }
