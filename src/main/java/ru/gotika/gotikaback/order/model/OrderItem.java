@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.order.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gotika.gotikaback.menu.model.Dish;
@@ -22,6 +23,7 @@ public class OrderItem {
 
     @OneToOne
     @JoinColumn(name = "dish_id", nullable = false)
+    @JsonManagedReference
     private Dish dish;
 
 }

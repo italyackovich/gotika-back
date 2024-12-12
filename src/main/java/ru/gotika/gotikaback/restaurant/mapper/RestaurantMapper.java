@@ -1,22 +1,19 @@
 package ru.gotika.gotikaback.restaurant.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
+import org.mapstruct.*;
+import ru.gotika.gotikaback.order.mapper.OrderMapper;
 import ru.gotika.gotikaback.restaurant.dto.RestaurantDto;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
 
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {UserMapper.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class, OrderMapper.class})
 public interface RestaurantMapper {
-    @Mapping(target = "userList", source = "userList")
     RestaurantDto restaurantToRestaurantDto(Restaurant restaurant);
 
-    @Mapping(target = "userList", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Restaurant restaurantDtoToRestaurant(RestaurantDto restaurantDto);
 
-    @Mapping(target = "userList", source = "userList")
     List<RestaurantDto> restaurantListToRestaurantDtoList(List<Restaurant> restaurantList);
 }

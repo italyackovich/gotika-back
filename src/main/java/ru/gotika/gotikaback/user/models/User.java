@@ -38,9 +38,11 @@ public class User {
 
     private String phoneNumber;
 
+    private String imageUrl;
+
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
 

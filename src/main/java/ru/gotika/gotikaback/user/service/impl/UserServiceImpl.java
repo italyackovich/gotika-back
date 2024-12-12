@@ -2,6 +2,8 @@ package ru.gotika.gotikaback.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import ru.gotika.gotikaback.common.service.CloudinaryService;
 import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
@@ -17,6 +19,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -47,6 +50,15 @@ public class UserServiceImpl implements UserService {
     public UserDto changeRole(Long id, ChangeRoleDto changeRoleDto) {
         return userRepository.findById(id).map(user -> {
             user.setRole(changeRoleDto.getRole());
+            userRepository.save(user);
+            return userMapper.userToUserDto(user);
+        }).orElseThrow(null);
+    }
+
+    @Override
+    public UserDto changeImage(Long id, MultipartFile image) {
+        return userRepository.findById(id).map(user -> {
+            user.setImageUrl(cloudinaryService.uploadFile(image));
             userRepository.save(user);
             return userMapper.userToUserDto(user);
         }).orElseThrow(null);

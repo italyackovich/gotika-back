@@ -3,10 +3,9 @@ package ru.gotika.gotikaback.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.gotika.gotikaback.user.dto.ChangePasswordRequest;
+import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.UserDto;
-import ru.gotika.gotikaback.user.enums.Role;
 import ru.gotika.gotikaback.user.service.UserService;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(userDto));
     }
 
-    @PutMapping("/{id}/put")
+    @PutMapping("/{id}/update")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id ,@RequestBody UserDto userDto) {
         return ResponseEntity.ok(userService.updateUser(id, userDto));
     }
@@ -43,14 +42,15 @@ public class UserController {
         return ResponseEntity.ok(userService.changeRole(id, changeRoleDto));
     }
 
-//    @PatchMapping("/chpassw")
-//    public ResponseEntity<UserDto> changePassword(@RequestBody ChangePasswordRequest passwordRequest) {
-//        //todo
-//    }
-//
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
-//        //todo
-//    }
+    @PatchMapping("/{id}/change-img")
+    public ResponseEntity<UserDto> changeImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(userService.changeImage(id, file));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }

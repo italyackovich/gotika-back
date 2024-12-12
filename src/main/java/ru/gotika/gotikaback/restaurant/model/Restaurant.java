@@ -21,7 +21,7 @@ public class Restaurant {
     @Column(nullable = false)
     private String name;
 
-    private String picture;
+    private String imageUrl;
 
     @Column(nullable = false)
     private String address;
@@ -32,8 +32,8 @@ public class Restaurant {
     @Column(nullable = false)
     private String openingHours;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "menu_id")
+    @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Menu menu;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)

@@ -36,13 +36,13 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.updateRestaurant(id, restaurantDto));
     }
 
-    @PatchMapping("{id}/change-picture")
-    public ResponseEntity<RestaurantDto> changePicture(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok(restaurantService.changePicture(id, file));
+    @PatchMapping("{id}/change-img")
+    public ResponseEntity<RestaurantDto> changeImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(restaurantService.changeImage(id, file));
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id) {
         restaurantService.deleteRestaurant(id);
         return ResponseEntity.noContent().build();
     }

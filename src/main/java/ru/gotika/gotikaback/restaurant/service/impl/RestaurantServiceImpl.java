@@ -44,10 +44,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public RestaurantDto changePicture(Long id, MultipartFile file) {
-        String pictureUrl = cloudinaryService.uploadFile(file);
+    public RestaurantDto changeImage(Long id, MultipartFile file) {
         return restaurantRepository.findById(id).map(r -> {
-            r.setPicture(pictureUrl);
+            r.setImageUrl(cloudinaryService.uploadFile(file));
             restaurantRepository.save(r);
             return restaurantMapper.restaurantToRestaurantDto(r);
         }).orElseThrow(null);
