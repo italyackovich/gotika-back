@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.payment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gotika.gotikaback.order.model.Order;
@@ -23,6 +24,10 @@ public class Payment {
     private PaymentStatus paymentStatus;
 
     private LocalDateTime paymentDate;
+
+    private String yookassaPaymentId;
+
+    private String confirmationUrl;
 
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false)

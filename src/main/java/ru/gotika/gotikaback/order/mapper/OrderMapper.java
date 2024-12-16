@@ -2,6 +2,7 @@ package ru.gotika.gotikaback.order.mapper;
 
 import org.mapstruct.*;
 import ru.gotika.gotikaback.order.dto.OrderDto;
+import ru.gotika.gotikaback.order.dto.OrderItemDto;
 import ru.gotika.gotikaback.order.enums.Status;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
@@ -9,11 +10,12 @@ import ru.gotika.gotikaback.user.models.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
         uses = {OrderItemMapper.class},
-        imports = {Status.class, LocalDateTime.class}
+        imports = {Status.class, LocalDateTime.class, Collectors.class}
 )
 public interface OrderMapper {
 
@@ -25,7 +27,6 @@ public interface OrderMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "status", defaultExpression = "java(Status.AWAITING)")
-    @Mapping(target = "totalAmount", defaultValue = "0")
     @Mapping(target = "orderDate", defaultExpression = "java(LocalDateTime.now())")
     @Mapping(target = "restaurant", source = "restaurantId", qualifiedByName = "idToRestaurant")
     @Mapping(target = "user", source = "userId", qualifiedByName = "idToUser")
@@ -46,4 +47,5 @@ public interface OrderMapper {
         user.setId(userId);
         return user;
     }
+
 }

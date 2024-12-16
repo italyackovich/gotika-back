@@ -1,6 +1,7 @@
 package ru.gotika.gotikaback.menu.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,12 +21,11 @@ public class Menu {
     private String name;
 
     @OneToOne
-    @JsonBackReference
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+    @JsonBackReference
     private Restaurant restaurant;
 
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
-    @JsonManagedReference
     private List<Dish> dishList;
 
 }

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gotika.gotikaback.order.enums.Status;
-import ru.gotika.gotikaback.payment.model.Payment;
+import ru.gotika.gotikaback.payment.dto.PaymentDto;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -23,6 +23,6 @@ public class OrderDto {
     private List<OrderItemDto> orderItems;
     private Long userId;
     private Long restaurantId;
-    private Payment payment;
+    private PaymentDto payment;
 
 }

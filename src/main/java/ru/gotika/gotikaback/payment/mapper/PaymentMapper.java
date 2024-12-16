@@ -1,0 +1,34 @@
+package ru.gotika.gotikaback.payment.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import ru.gotika.gotikaback.order.mapper.OrderMapper;
+import ru.gotika.gotikaback.order.model.Order;
+import ru.gotika.gotikaback.payment.dto.PaymentDto;
+import ru.gotika.gotikaback.payment.enums.PaymentStatus;
+import ru.gotika.gotikaback.payment.model.Payment;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Mapper(componentModel = "spring", uses = {OrderMapper.class}, imports = {PaymentStatus.class, LocalDateTime.class})
+public interface PaymentMapper {
+    List<PaymentDto> paymentListToPaymentDtoList(List<Payment> paymentList);
+
+    @Mapping(target = "paymentStatus", defaultExpression = "java(PaymentStatus.NOT_PAID)")
+    @Mapping(target = "paymentDate", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "order", source = "orderId", qualifiedByName = "idToOrder")
+    Payment paymentDtoToPayment(PaymentDto paymentDto);
+
+    @Mapping(target = "orderId", source = "order.id")
+    PaymentDto paymentToPaymentDto(Payment payment);
+
+    @Named("idToOrder")
+    default Order idToOrder(Long orderId) {
+        if (orderId == null) return null;
+        Order order = new Order();
+        order.setId(orderId);
+        return order;
+    }
+}

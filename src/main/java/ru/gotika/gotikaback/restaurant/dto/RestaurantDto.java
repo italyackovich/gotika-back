@@ -3,10 +3,8 @@ package ru.gotika.gotikaback.restaurant.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gotika.gotikaback.menu.model.Menu;
+import ru.gotika.gotikaback.menu.dto.MenuDto;
 import ru.gotika.gotikaback.order.dto.OrderDto;
-import ru.gotika.gotikaback.order.model.Order;
-import ru.gotika.gotikaback.review.model.Review;
 import ru.gotika.gotikaback.user.dto.UserDto;
 
 
@@ -23,8 +21,8 @@ public class RestaurantDto {
     private String phoneNumber;
     private String openingHours;
     private String imageUrl;
-    private Menu menu;
+    private MenuDto menu;
     private List<UserDto> userList;
     private List<OrderDto> orderList;
-    private List<Review> reviewList;
+//    private List<Review> reviewList;
 }

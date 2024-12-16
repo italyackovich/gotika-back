@@ -1,5 +1,7 @@
 package ru.gotika.gotikaback.order.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gotika.gotikaback.order.enums.Status;
@@ -39,6 +41,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
+    @JsonBackReference
     private User user;
 
     @ManyToOne

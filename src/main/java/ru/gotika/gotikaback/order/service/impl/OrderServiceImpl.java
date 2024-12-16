@@ -6,6 +6,7 @@ import ru.gotika.gotikaback.order.dto.OrderDto;
 import ru.gotika.gotikaback.order.dto.StatusDto;
 import ru.gotika.gotikaback.order.mapper.OrderMapper;
 import ru.gotika.gotikaback.order.model.Order;
+import ru.gotika.gotikaback.order.model.OrderItem;
 import ru.gotika.gotikaback.order.repository.OrderRepository;
 import ru.gotika.gotikaback.order.service.OrderService;
 
@@ -30,15 +31,28 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
-        Order order = orderRepository.save(orderMapper.orderDtoToOrder(orderDto));
+        Order order = orderMapper.orderDtoToOrder(orderDto);
+        order.setTotalAmount(0.0);
+        if (order.getOrderItems() != null) {
+            Double totalAmount = order.getOrderItems().stream()
+                    .mapToDouble(OrderItem::getPrice)
+                    .sum();
+            order.setTotalAmount(totalAmount);
+        }
+        orderRepository.save(order);
         return orderMapper.orderToOrderDto(order);
     }
 
     @Override
     public OrderDto updateOrder(Long id, OrderDto orderDto) {
         return orderRepository.findById(id).map(order -> {
-            orderRepository.save(orderMapper.orderDtoToOrder(orderDto));
-            return orderDto;
+            Order newOrder = orderMapper.orderDtoToOrder(orderDto);
+            Double totalAmount = order.getOrderItems().stream()
+                    .mapToDouble(OrderItem::getPrice)
+                    .sum();
+            newOrder.setTotalAmount(totalAmount);
+            orderRepository.save(newOrder);
+            return orderMapper.orderToOrderDto(newOrder);
         }).orElse(null);
     }
 
