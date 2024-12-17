@@ -9,7 +9,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-#    database: postgresql
+    open-in-view: false
+  #    database: postgresql
 #    database-platform: org.hibernate.dialect.PostgreSQLDialect
 #    show-sql: false
 #    properties:

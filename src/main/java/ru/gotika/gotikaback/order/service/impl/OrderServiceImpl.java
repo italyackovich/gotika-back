@@ -33,12 +33,6 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createOrder(OrderDto orderDto) {
         Order order = orderMapper.orderDtoToOrder(orderDto);
         order.setTotalAmount(0.0);
-        if (order.getOrderItems() != null) {
-            Double totalAmount = order.getOrderItems().stream()
-                    .mapToDouble(OrderItem::getPrice)
-                    .sum();
-            order.setTotalAmount(totalAmount);
-        }
         orderRepository.save(order);
         return orderMapper.orderToOrderDto(order);
     }

@@ -34,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         // Создать платеж
         Map<String, Object> paymentResponse = yookassaService.createPayment(
-                100.00,
+                order.getTotalAmount(),
                 "Оплата заказа №" + paymentDto.getOrderId(),
                 "http://localhost:8080/payments/confirmation",
                 paymentDto.getOrderId(),
@@ -48,7 +48,6 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setYookassaPaymentId((String) paymentResponse.get("id"));
         payment.setConfirmationUrl((String) ((Map) paymentResponse.get("confirmation")).get("confirmation_url"));
         paymentRepository.save(payment);
-        System.out.println((String) ((Map) paymentResponse.get("confirmation")).get("confirmation_url"));
         return paymentMapper.paymentToPaymentDto(payment);
     }
 

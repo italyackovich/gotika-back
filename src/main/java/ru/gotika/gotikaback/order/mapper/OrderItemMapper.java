@@ -1,7 +1,6 @@
 package ru.gotika.gotikaback.order.mapper;
 
 import org.mapstruct.*;
-import ru.gotika.gotikaback.menu.mapper.DishMapper;
 import ru.gotika.gotikaback.menu.model.Dish;
 import ru.gotika.gotikaback.order.dto.OrderItemDto;
 import ru.gotika.gotikaback.order.model.Order;

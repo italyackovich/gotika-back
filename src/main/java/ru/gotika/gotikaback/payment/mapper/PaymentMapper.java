@@ -3,7 +3,6 @@ package ru.gotika.gotikaback.payment.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import ru.gotika.gotikaback.order.mapper.OrderMapper;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.payment.dto.PaymentDto;
 import ru.gotika.gotikaback.payment.enums.PaymentStatus;
@@ -12,7 +11,7 @@ import ru.gotika.gotikaback.payment.model.Payment;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {OrderMapper.class}, imports = {PaymentStatus.class, LocalDateTime.class})
+@Mapper(componentModel = "spring", imports = {PaymentStatus.class, LocalDateTime.class})
 public interface PaymentMapper {
     List<PaymentDto> paymentListToPaymentDtoList(List<Payment> paymentList);
 

@@ -3,7 +3,6 @@ package ru.gotika.gotikaback.payment.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gotika.gotikaback.order.dto.OrderDto;
 import ru.gotika.gotikaback.payment.enums.PaymentMethod;
 import ru.gotika.gotikaback.payment.enums.PaymentStatus;
 
@@ -19,7 +18,6 @@ public class PaymentDto {
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
     private LocalDateTime paymentDate;
-    private OrderDto order;
     private String yookassaPaymentId;
     private String confirmationUrl;
 }

@@ -32,6 +32,8 @@ public class Restaurant {
     @Column(nullable = false)
     private String openingHours;
 
+    private Float rating;
+
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Menu menu;
