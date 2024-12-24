@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gotika.gotikaback.menu.dto.MenuDto;
 import ru.gotika.gotikaback.order.dto.OrderDto;
+import ru.gotika.gotikaback.review.dto.ReviewDto;
 import ru.gotika.gotikaback.user.dto.UserDto;
 
 
@@ -25,5 +26,5 @@ public class RestaurantDto {
     private MenuDto menu;
     private List<UserDto> userList;
     private List<OrderDto> orderList;
-//    private List<Review> reviewList;
+    private List<ReviewDto> reviewList;
 }

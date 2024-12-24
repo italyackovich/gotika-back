@@ -1,6 +1,5 @@
 package ru.gotika.gotikaback.payment.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gotika.gotikaback.order.model.Order;

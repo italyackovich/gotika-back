@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import ru.gotika.gotikaback.notification.model.Notification;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
 import ru.gotika.gotikaback.review.model.Review;
@@ -54,4 +55,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Review> reviewList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notificationList;
 }

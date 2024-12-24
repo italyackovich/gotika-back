@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/restaurants")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class RestaurantController {
 
     private final RestaurantService restaurantService;
@@ -36,7 +37,7 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.updateRestaurant(id, restaurantDto));
     }
 
-    @PatchMapping("{id}/change-img")
+    @PatchMapping("/{id}/change-img")
     public ResponseEntity<RestaurantDto> changeImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(restaurantService.changeImage(id, file));
     }

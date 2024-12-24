@@ -7,7 +7,7 @@ import ru.gotika.gotikaback.payment.dto.PaymentDto;
 import ru.gotika.gotikaback.payment.service.PaymentService;
 
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping("/api/v1/payments")
 @RequiredArgsConstructor
 public class PaymentController {
 

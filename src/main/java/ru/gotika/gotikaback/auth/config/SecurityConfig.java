@@ -34,6 +34,12 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/restaurants/**").permitAll()
+                .requestMatchers("/api/v1/orders/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_CLIENT", "ROLE_EMPLOYEE")
+                .requestMatchers("/api/v1/orderItems/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_CLIENT", "ROLE_EMPLOYEE")
+                .requestMatchers("/api/v1/payments/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_CLIENT", "ROLE_EMPLOYEE")
+                .requestMatchers("/api/v1/dishes/**").permitAll()
+                .requestMatchers("/api/v1/menu/**").permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider);

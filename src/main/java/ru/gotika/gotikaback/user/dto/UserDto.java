@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gotika.gotikaback.order.dto.OrderDto;
-import ru.gotika.gotikaback.review.model.Review;
+import ru.gotika.gotikaback.review.dto.ReviewDto;
 import ru.gotika.gotikaback.user.enums.Role;
 
 import java.util.List;
@@ -24,6 +24,6 @@ public class UserDto {
     private String phoneNumber;
     private String address;
     private List<OrderDto> orderList;
-    private List<Review> reviewList;
+    private List<ReviewDto> reviewList;
 
 }
