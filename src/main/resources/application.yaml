@@ -1,6 +1,9 @@
 spring:
   application:
     name: gotika-backend
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
   datasource:
     url: jdbc:postgresql://localhost:5432/gotikaDB
     username: postgres
@@ -8,8 +11,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    open-in-view: false
+      ddl-auto: update
+    open-in-view: true
   #    database: postgresql
 #    database-platform: org.hibernate.dialect.PostgreSQLDialect
 #    show-sql: false
@@ -53,3 +56,9 @@ yookassa:
   shop-id: 999174
   secret-key: ${YOOKASSA_SECRET_KEY}
   api-url: https://api.yookassa.ru/v3/payments
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
