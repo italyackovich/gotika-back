@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: admin
+      changes:
+        - addColumn:
+            tableName: menu
+            columns:
+              - column:
+                  name: categories
+                  type: TEXT
+  - changeSet:
+      id: 2
+      author: admin
+      changes:
+        - dropColumn:
+            columnName: categories
+            tableName: menu
