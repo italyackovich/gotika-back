@@ -14,5 +14,6 @@ public class MenuDto {
     private Long id;
     private Long restaurantId;
     private String name;
+    private List<CategoryDto> categoryList;
     private List<DishDto> dishList;
 }

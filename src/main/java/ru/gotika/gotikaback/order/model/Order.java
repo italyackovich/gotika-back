@@ -31,7 +31,6 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime orderDate;
 
-    @Column(nullable = false)
     private LocalTime deliveryTime;
 
     private String deliveryAddress;

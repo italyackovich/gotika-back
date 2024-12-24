@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken(customUserDetails);
         saveUserToken(user, accessToken);
 
-        return authMapper.toAuthResponse(accessToken, refreshToken);
+        return authMapper.toAuthResponse(accessToken, refreshToken, user.getId());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken(customUserDetails);
         saveUserToken(user, accessToken);
 
-        return authMapper.toAuthResponse(accessToken, refreshToken);
+        return authMapper.toAuthResponse(accessToken, refreshToken, user.getId());
     }
 
     private void saveUserToken(User user, String accessToken) {
@@ -108,7 +108,7 @@ public class AuthServiceImpl implements AuthService {
                 String accessToken = jwtService.generateAccessToken(customUserDetails);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
-                AuthResponse authResponse = authMapper.toAuthResponse(accessToken, refreshToken);
+                AuthResponse authResponse = authMapper.toAuthResponse(accessToken, refreshToken, user.getId());
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }

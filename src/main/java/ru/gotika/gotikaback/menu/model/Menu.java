@@ -28,4 +28,7 @@ public class Menu {
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<Dish> dishList;
 
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
+    private List<Category> categoryList;
+
 }
