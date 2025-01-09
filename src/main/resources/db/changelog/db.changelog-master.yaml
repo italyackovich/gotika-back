@@ -18,3 +18,6 @@ databaseChangeLog:
             tableName: menu
   - include:
       file: db/changelog/v2__update_order_item_relationship.yaml
+
+  - include:
+      file: db/changelog/db.changelog-2025-01-09-status-check.yaml

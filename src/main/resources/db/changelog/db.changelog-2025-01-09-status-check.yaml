@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: "update-status-check"
+      author: admin
+      changes:
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: |
+              ALTER TABLE orders DROP CONSTRAINT IF EXISTS orders_status_check;
+              ALTER TABLE orders ADD CONSTRAINT orders_status_check
+              CHECK (status IN ('PAID', 'NOT_PAID', 'CANCELED', 'IN_PROGRESS', 'DELIVERED', 'AWAITING'));
