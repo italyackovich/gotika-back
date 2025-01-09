@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: admin
+      changes:
+        - dropUniqueConstraint:
+            constraintName: order_item_dish_id_key
+            tableName: order_item
+        - addForeignKeyConstraint:
+            baseTableName: order_item
+            baseColumnNames: dish_id
+            referencedTableName: dish
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: order_item_dish_id_key
+            onUpdate: CASCADE

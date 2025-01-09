@@ -3,7 +3,10 @@ package ru.gotika.gotikaback.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import ru.gotika.gotikaback.auth.dto.AuthRequest;
 import ru.gotika.gotikaback.auth.dto.AuthResponse;
@@ -28,10 +31,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> authenticate(
+    public ResponseEntity<?> authenticate(
             @RequestBody AuthRequest request
     ) {
-        return ResponseEntity.ok(authService.login(request));
+        try {
+            return ResponseEntity.ok(authService.login(request));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверный email или пароль");
+        }
     }
 
     @PostMapping("/refresh")

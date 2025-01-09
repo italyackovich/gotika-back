@@ -13,7 +13,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.gotika.gotikaback.auth.filter.JwtAuthenticationFilter;
+
+import java.util.List;
 
 
 @Configuration
@@ -33,11 +38,12 @@ public class SecurityConfig {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/**").permitAll()
+                .requestMatchers("/api/v1/users/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/restaurants/**").permitAll()
-                .requestMatchers("/api/v1/orders/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_CLIENT", "ROLE_EMPLOYEE")
-                .requestMatchers("/api/v1/orderItems/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_CLIENT", "ROLE_EMPLOYEE")
-                .requestMatchers("/api/v1/payments/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_CLIENT", "ROLE_EMPLOYEE")
+                .requestMatchers("/api/v1/orders/**").permitAll()
+                .requestMatchers("/api/v1/orderItems/**").permitAll()
+                .requestMatchers("/api/v1/payments/**").permitAll()
                 .requestMatchers("/api/v1/dishes/**").permitAll()
                 .requestMatchers("/api/v1/menu/**").permitAll()
                 .anyRequest().authenticated());
@@ -51,4 +57,17 @@ public class SecurityConfig {
                                 SecurityContextHolder.clearContext()));
         return http.build();
     }
+
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Укажите адрес фронтенда
+//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        configuration.setAllowedHeaders(List.of("*"));
+//        configuration.setAllowCredentials(true);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }

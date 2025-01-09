@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.common.service.CloudinaryService;
+import ru.gotika.gotikaback.user.dto.ChangeAddress;
 import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
@@ -40,10 +41,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(Long id, UserDto userDto) {
-        userRepository.findById(id).ifPresent(user -> {
-            userRepository.save(userMapper.userDtoToUser(userDto));
-        });
-        return userDto;
+        return userRepository.findById(id).map(user -> {
+            User updatedUser = userMapper.userDtoToUser(userDto);
+            updatedUser.setId(user.getId());
+            updatedUser.setPassword(user.getPassword());
+            userRepository.save(updatedUser);
+            return userMapper.userToUserDto(updatedUser);
+        }).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public UserDto patchUser(Long id, ChangeAddress changeAddress) {
+        return userRepository.findById(id).map(user -> {
+            user.setAddress(changeAddress.getAddress());
+            userRepository.save(user);
+            return userMapper.userToUserDto(user);
+        }).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override

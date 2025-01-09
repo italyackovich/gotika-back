@@ -1,8 +1,6 @@
 package ru.gotika.gotikaback.review.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
 import ru.gotika.gotikaback.review.dto.ReviewDto;
 import ru.gotika.gotikaback.review.model.Review;
@@ -16,6 +14,7 @@ public interface ReviewMapper {
 
     ReviewDto reviewToReviewDto(Review review);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "user", source = "userId", qualifiedByName = "idToUser")
     @Mapping(target = "restaurant", source = "restaurantId", qualifiedByName = "idToRestaurant")
     Review reviewDtoToReview(ReviewDto dto);

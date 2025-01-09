@@ -8,6 +8,7 @@ import ru.gotika.gotikaback.payment.service.PaymentService;
 
 @RestController
 @RequestMapping("/api/v1/payments")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class PaymentController {
 

@@ -33,9 +33,5 @@ public class Dish {
     @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
 
-    @OneToOne(mappedBy = "dish")
-    @JsonIgnore
-    private OrderItem orderItem;
-
 
 }

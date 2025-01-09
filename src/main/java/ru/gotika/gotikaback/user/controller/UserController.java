@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.gotika.gotikaback.user.dto.ChangeAddress;
 import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.service.UserService;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -35,6 +37,11 @@ public class UserController {
     @PutMapping("/{id}/update")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id ,@RequestBody UserDto userDto) {
         return ResponseEntity.ok(userService.updateUser(id, userDto));
+    }
+
+    @PatchMapping("/{id}/patch")
+    public ResponseEntity<UserDto> patchUser(@PathVariable Long id, @RequestBody ChangeAddress changeAddress) {
+        return ResponseEntity.ok(userService.patchUser(id, changeAddress));
     }
 
     @PatchMapping("/{id}/change-role")

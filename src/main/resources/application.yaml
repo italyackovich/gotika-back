@@ -41,7 +41,7 @@ spring:
       port: 6379
 
 jwt:
-  secret: ${SECRET_KEY}
+  secret: EJRNGJKERNHTRHNUI32895734GERGERGERG6BIJ36BNJKL4537I38KJB86HJ34B8HJ3B65JH8B3K8B3KJ8B
   accessToken:
     expiration: 900000
     cookie-name: access
@@ -50,15 +50,9 @@ jwt:
     cookie-name: refresh
 
 cloudinary:
-  url: ${CLOUDINARY_URL}
+  url: cloudinary://171927165332578:6tqUCnBWHM6s7e3H0IivtgzV6O8@dsx6e6phm
 
 yookassa:
   shop-id: 999174
-  secret-key: ${YOOKASSA_SECRET_KEY}
+  secret-key: test_6GJwionocOkNcVs9kXmfSdW63Pd6VyRc9_VDmDL_2Ko
   api-url: https://api.yookassa.ru/v3/payments
-
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG

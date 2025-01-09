@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.common.service.CloudinaryService;
+import ru.gotika.gotikaback.restaurant.dto.ChangeRequest;
 import ru.gotika.gotikaback.restaurant.dto.RestaurantDto;
 import ru.gotika.gotikaback.restaurant.mapper.RestaurantMapper;
+import ru.gotika.gotikaback.restaurant.model.Restaurant;
 import ru.gotika.gotikaback.restaurant.repository.RestaurantRepository;
 import ru.gotika.gotikaback.restaurant.service.RestaurantService;
 
@@ -36,11 +38,25 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public RestaurantDto patchRestaurant(Long id, ChangeRequest changeRequest) {
+        return restaurantRepository.findById(id).map(restaurant -> {
+            restaurant.setName(changeRequest.getName());
+            restaurant.setAddress(changeRequest.getAddress());
+            restaurant.setOpeningHours(changeRequest.getOpeningHours());
+            restaurant.setPhoneNumber(changeRequest.getPhoneNumber());
+            restaurantRepository.save(restaurant);
+            return restaurantMapper.restaurantToRestaurantDto(restaurant);
+        }).orElseThrow(() -> new RuntimeException("Restaurant not found"));
+    }
+
+    @Override
     public RestaurantDto updateRestaurant(Long id, RestaurantDto restaurantDto) {
-        restaurantRepository.findById(id).ifPresent(restaurant -> {
-            restaurantRepository.save(restaurantMapper.restaurantDtoToRestaurant(restaurantDto));
-        });
-        return restaurantDto;
+        return restaurantRepository.findById(id).map(restaurant -> {
+            Restaurant updatedRestaurant = restaurantMapper.restaurantDtoToRestaurant(restaurantDto);
+            updatedRestaurant.setId(id);
+            restaurantRepository.save(updatedRestaurant);
+            return restaurantMapper.restaurantToRestaurantDto(updatedRestaurant);
+        }).orElseThrow(() -> new RuntimeException("Restaurant not found"));
     }
 
     @Override

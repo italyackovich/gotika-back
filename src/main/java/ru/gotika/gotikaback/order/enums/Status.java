@@ -1,7 +1,8 @@
 package ru.gotika.gotikaback.order.enums;
 
 public enum Status {
-    AWAITING,
+    PAID,
+    NOT_PAID,
     IN_PROGRESS,
     DELIVERED
 }

@@ -38,8 +38,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewDto updateReview(Long id, ReviewDto reviewDto) {
         return reviewRepository.findById(id).map(review -> {
-            reviewRepository.save(reviewMapper.reviewDtoToReview(reviewDto));
-            return reviewDto;
+            Review updatedReview = reviewMapper.reviewDtoToReview(reviewDto);
+            updatedReview.setId(review.getId());
+            reviewRepository.save(updatedReview);
+            return reviewMapper.reviewToReviewDto(updatedReview);
         }).orElse(null);
     }
 

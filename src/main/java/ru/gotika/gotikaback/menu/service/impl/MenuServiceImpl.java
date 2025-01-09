@@ -36,9 +36,11 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public MenuDto updateMenu(Long id, MenuDto menuDto) {
         return menuRepository.findById(id).map(menu -> {
-            menuRepository.save(menuMapper.menuDtoToMenu(menuDto));
-            return menuDto;
-        }).orElse(null);
+            Menu updatedMenu = menuMapper.menuDtoToMenu(menuDto);
+            updatedMenu.setId(menu.getId());
+            menuRepository.save(updatedMenu);
+            return menuMapper.menuToMenuDto(updatedMenu);
+        }).orElseThrow(() -> new RuntimeException("Menu not found"));
     }
 
     @Override

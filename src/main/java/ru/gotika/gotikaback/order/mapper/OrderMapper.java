@@ -4,7 +4,6 @@ import org.mapstruct.*;
 import ru.gotika.gotikaback.order.dto.OrderDto;
 import ru.gotika.gotikaback.order.enums.Status;
 import ru.gotika.gotikaback.order.model.Order;
-import ru.gotika.gotikaback.order.model.OrderItem;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
 import ru.gotika.gotikaback.user.models.User;
 
@@ -23,7 +22,6 @@ public interface OrderMapper {
     OrderDto orderToOrderDto(Order order);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "status", defaultExpression = "java(Status.AWAITING)")
     @Mapping(target = "orderDate", defaultExpression = "java(LocalDateTime.now())")
     @Mapping(target = "restaurant", source = "restaurantId", qualifiedByName = "idToRestaurant")
     @Mapping(target = "user", source = "userId", qualifiedByName = "idToUser")

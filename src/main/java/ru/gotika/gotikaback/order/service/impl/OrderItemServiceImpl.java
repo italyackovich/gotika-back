@@ -56,8 +56,9 @@ public class OrderItemServiceImpl implements OrderItemService {
     public OrderItemDto updateOrderItem(Long id, OrderItemDto orderItemDto) {
         return orderItemRepository.findById(id).map(orderItem -> {
             OrderItem newOrderItem = orderItemMapper.orderItemDtoToOrderItem(orderItemDto);
+            newOrderItem.setId(orderItem.getId());
             Order order = orderRepository.findById(orderItemDto.getOrderId()).orElse(null);
-            newOrderItem.setPrice(newOrderItem.getQuantity() * newOrderItem.getDish().getPrice());
+            newOrderItem.setPrice(newOrderItem.getQuantity() * orderItem.getDish().getPrice());
             if (order != null) {
                 order.setTotalAmount(order.getOrderItems()
                         .stream()
@@ -73,6 +74,17 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public void deleteOrderItemById(Long id) {
+        OrderItem orderitem = orderItemRepository.findById(id).orElse(null);
         orderItemRepository.deleteById(id);
+
+        if (orderitem != null) {
+            Order order = orderRepository.findById(orderitem.getOrder().getId()).orElse(null);
+            assert order != null;
+            order.setTotalAmount(order.getOrderItems()
+                    .stream()
+                    .mapToDouble(OrderItem::getPrice).sum()
+            );
+            orderRepository.save(order);
+        }
     }
 }

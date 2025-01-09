@@ -1,8 +1,6 @@
 package ru.gotika.gotikaback.payment.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.payment.dto.PaymentDto;
 import ru.gotika.gotikaback.payment.enums.PaymentStatus;
@@ -15,6 +13,7 @@ import java.util.List;
 public interface PaymentMapper {
     List<PaymentDto> paymentListToPaymentDtoList(List<Payment> paymentList);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "paymentStatus", defaultExpression = "java(PaymentStatus.NOT_PAID)")
     @Mapping(target = "paymentDate", expression = "java(LocalDateTime.now())")
     @Mapping(target = "order", source = "orderId", qualifiedByName = "idToOrder")

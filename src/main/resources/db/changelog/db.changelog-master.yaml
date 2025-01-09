@@ -16,3 +16,5 @@ databaseChangeLog:
         - dropColumn:
             columnName: categories
             tableName: menu
+  - include:
+      file: db/changelog/v2__update_order_item_relationship.yaml

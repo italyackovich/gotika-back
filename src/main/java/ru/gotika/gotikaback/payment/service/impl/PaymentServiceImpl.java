@@ -36,7 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
         Map<String, Object> paymentResponse = yookassaService.createPayment(
                 order.getTotalAmount(),
                 "Оплата заказа №" + paymentDto.getOrderId(),
-                "http://localhost:8080/payments/confirmation",
+                "http://localhost:5173/",
                 paymentDto.getOrderId(),
                 idempotenceKey
         );

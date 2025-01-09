@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.order.dto.OrderDto;
 import ru.gotika.gotikaback.order.dto.StatusDto;
+import ru.gotika.gotikaback.order.enums.Status;
 import ru.gotika.gotikaback.order.mapper.OrderMapper;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.order.model.OrderItem;
 import ru.gotika.gotikaback.order.repository.OrderRepository;
 import ru.gotika.gotikaback.order.service.OrderService;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -33,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createOrder(OrderDto orderDto) {
         Order order = orderMapper.orderDtoToOrder(orderDto);
         order.setTotalAmount(0.0);
+        order.setStatus(Status.NOT_PAID);
         orderRepository.save(order);
         return orderMapper.orderToOrderDto(order);
     }
@@ -41,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto updateOrder(Long id, OrderDto orderDto) {
         return orderRepository.findById(id).map(order -> {
             Order newOrder = orderMapper.orderDtoToOrder(orderDto);
+            newOrder.setId(order.getId());
             Double totalAmount = order.getOrderItems().stream()
                     .mapToDouble(OrderItem::getPrice)
                     .sum();

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.common.service.CloudinaryService;
+import ru.gotika.gotikaback.menu.dto.DishChangeRequest;
 import ru.gotika.gotikaback.menu.dto.DishDto;
 import ru.gotika.gotikaback.menu.enums.DishCategory;
 import ru.gotika.gotikaback.menu.mapper.DishMapper;
@@ -43,6 +44,17 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    public DishDto patchDish(Long id, DishChangeRequest dishChangeRequest) {
+        return dishRepository.findById(id).map(dish -> {
+            dish.setPrice(dishChangeRequest.getPrice());
+            dish.setName(dishChangeRequest.getName());
+            dish.setDescription(dishChangeRequest.getDescription());
+            dishRepository.save(dish);
+            return dishMapper.dishToDishDto(dish);
+        }).orElseThrow(() -> new RuntimeException("Dish not found"));
+    }
+
+    @Override
     public DishDto createDish(DishDto dishDto) {
         Dish dish = dishRepository.save(dishMapper.dishDtoToDish(dishDto));
         return dishMapper.dishToDishDto(dish);
@@ -51,9 +63,11 @@ public class DishServiceImpl implements DishService {
     @Override
     public DishDto updateDish(Long id, DishDto dishDto) {
         return dishRepository.findById(id).map(dish -> {
-            dishRepository.save(dishMapper.dishDtoToDish(dishDto));
-            return dishDto;
-        }).orElse(null);
+            Dish updatedDish = dishMapper.dishDtoToDish(dishDto);
+            updatedDish.setId(dish.getId());
+            dishRepository.save(updatedDish);
+            return dishMapper.dishToDishDto(updatedDish);
+        }).orElseThrow(() -> new RuntimeException("Dish not found"));
     }
 
     @Override

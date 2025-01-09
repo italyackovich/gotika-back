@@ -32,7 +32,7 @@ public class Restaurant {
     @Column(nullable = false)
     private String openingHours;
 
-    private Float rating;
+    private Float rating = 0.0f;
 
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL)
     @JsonManagedReference

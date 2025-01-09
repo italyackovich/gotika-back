@@ -36,11 +36,12 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationDto updateNotification(Long id, NotificationDto notificationDto) {
-        notificationRepository.findById(id).ifPresent(notification -> {
-            notificationRepository
-                    .save(notificationMapper.notificationDtoToNotification(notificationDto));
-        });
-        return notificationDto;
+        return notificationRepository.findById(id).map(notification -> {
+            Notification updatedNotification = notificationMapper.notificationDtoToNotification(notificationDto);
+            updatedNotification.setId(notification.getId());
+            notificationRepository.save(updatedNotification);
+            return notificationMapper.notificationToNotificationDto(updatedNotification);
+        }).orElseThrow(() -> new RuntimeException("Notification not found"));
     }
 
     @Override

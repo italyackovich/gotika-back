@@ -6,9 +6,10 @@ import ru.gotika.gotikaback.order.dto.OrderItemDto;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.order.model.OrderItem;
 
+import java.time.LocalTime;
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {LocalTime.class})
 public interface OrderItemMapper {
 
     List<OrderItemDto> orderItemListToOrderItemDtoList(List<OrderItem> orderItemList);
