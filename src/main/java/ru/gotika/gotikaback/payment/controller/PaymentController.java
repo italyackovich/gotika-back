@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.gotika.gotikaback.payment.dto.PaymentDto;
+import ru.gotika.gotikaback.payment.dto.PaymentNotificationDto;
 import ru.gotika.gotikaback.payment.service.PaymentService;
 
 @RestController
@@ -14,6 +15,11 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PaymentDto> getPaymentById(@PathVariable Long id) {
+        return ResponseEntity.ok(paymentService.getPayment(id));
+    }
+
     @PostMapping("/create")
     public ResponseEntity<PaymentDto> createPayment(@RequestBody PaymentDto payment) {
         return ResponseEntity.ok(paymentService.createPayment(payment));
@@ -22,6 +28,12 @@ public class PaymentController {
     @GetMapping("/confirmation")
     public ResponseEntity<PaymentDto> confirmPayment(@RequestParam String paymentId) {
         return ResponseEntity.ok(paymentService.confirmPayment(paymentId));
+    }
+
+    @PostMapping("/webhook-change-status")
+    public ResponseEntity<String> handleYooKassaWebhook(@RequestBody PaymentNotificationDto notification) {
+        paymentService.webhookYooKassa(notification);
+        return ResponseEntity.ok("Webhook received");
     }
 
 }

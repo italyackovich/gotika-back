@@ -11,7 +11,6 @@ import ru.gotika.gotikaback.order.model.OrderItem;
 import ru.gotika.gotikaback.order.repository.OrderRepository;
 import ru.gotika.gotikaback.order.service.OrderService;
 
-import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -66,5 +65,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public void changeOrderStatusByPaymentId(Long paymentId, Status status) {
+        orderRepository.findByPaymentId(paymentId).ifPresent(order -> {
+            order.setStatus(status);
+            orderRepository.save(order);
+        });
     }
 }
