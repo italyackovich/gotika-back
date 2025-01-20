@@ -1,12 +1,18 @@
 package ru.gotika.gotikaback.order.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.gotika.gotikaback.order.dto.OrderDto;
 import ru.gotika.gotikaback.order.dto.StatusDto;
+import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.order.service.OrderService;
 
+import java.io.*;
 import java.util.List;
 
 @RestController
@@ -25,6 +31,35 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
+    }
+
+    @GetMapping("/generate-report")
+    public ResponseEntity<?> generateOrderReport(@RequestParam Long restaurantId) throws IOException {
+        List<Order> orders = orderService.getOrdersForLastMonth(restaurantId);
+
+        File tempFile = new File("orders_report.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+            writer.write("Отчет заказов за последний месяц\n\n");
+            for (Order order : orders) {
+                writer.write("ID заказа: " + order.getId() + "\n");
+                writer.write("Имя клиента: " + order.getUser().getFirstName() + " " + order.getUser().getLastName() + "\n");
+                writer.write("Сумма заказа: " + order.getTotalAmount() + "\n");
+                writer.write("Дата заказа: " + order.getOrderDate() + "\n\n");
+            }
+        }
+
+        // Чтение файла в поток
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(tempFile));
+
+        // Отправляем файл пользователю
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=orders_report.txt");
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .headers(headers)
+                .contentLength(tempFile.length())
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(resource);
     }
 
     @PostMapping("/create")

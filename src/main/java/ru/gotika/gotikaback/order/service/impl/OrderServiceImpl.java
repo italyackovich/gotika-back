@@ -11,6 +11,7 @@ import ru.gotika.gotikaback.order.model.OrderItem;
 import ru.gotika.gotikaback.order.repository.OrderRepository;
 import ru.gotika.gotikaback.order.service.OrderService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -60,6 +61,15 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.save(order);
             return orderMapper.orderToOrderDto(order);
         }).orElse(null);
+    }
+
+    @Override
+    public List<Order> getOrdersForLastMonth(Long restaurantId) {
+
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+        LocalDateTime now = LocalDateTime.now();
+
+        return orderRepository.findByRestaurantIdAndOrderDateBetween(restaurantId, oneMonthAgo, now);
     }
 
     @Override
