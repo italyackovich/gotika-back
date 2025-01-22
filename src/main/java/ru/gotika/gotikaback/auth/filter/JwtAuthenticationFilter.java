@@ -45,14 +45,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
 
+        System.out.println("JWT TUUUUT: " + authHeader);
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt);
         try {
+            jwt = authHeader.substring(7);
+            userEmail = jwtService.extractUsername(jwt);
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
                 var isTokenValid = tokenRepository.findByToken(jwt)
@@ -73,7 +75,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException e) {
             System.out.println("JWT expired: " + e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token is expired");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Token is expired\"}");
+            response.getWriter().flush();
+            return;
         }
 
         filterChain.doFilter(request, response);
