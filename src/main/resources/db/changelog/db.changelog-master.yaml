@@ -21,3 +21,6 @@ databaseChangeLog:
 
   - include:
       file: db/changelog/db.changelog-2025-01-09-status-check.yaml
+
+  - include:
+      file: db/changelog/db.changelog-2025-01-13-change-rating-type-to-integer.yaml

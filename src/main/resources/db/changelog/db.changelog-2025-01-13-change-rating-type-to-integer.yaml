@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: change-rating-type-to-integer
+      author: admin
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: ALTER TABLE public.review ALTER COLUMN rating TYPE INTEGER USING rating::INTEGER;
