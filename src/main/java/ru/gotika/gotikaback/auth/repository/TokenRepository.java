@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TokenRepository extends JpaRepository<Token, Long> {
-    List<Token> findByUserIdAndRevokedFalse(Long id);
+    List<Token> findByUserIdAndIsRevokedFalse(Long id);
     Optional<Token> findByToken(String token);
 }

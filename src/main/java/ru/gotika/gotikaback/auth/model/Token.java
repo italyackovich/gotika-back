@@ -10,8 +10,8 @@ import ru.gotika.gotikaback.user.models.User;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Token {
 
@@ -25,7 +25,7 @@ public class Token {
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
 
-    private boolean revoked;
+    private Boolean isRevoked;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
