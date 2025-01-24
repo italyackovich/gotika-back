@@ -1,8 +1,11 @@
 package ru.gotika.gotikaback.auth.service;
 
 import io.jsonwebtoken.Claims;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.gotika.gotikaback.auth.dto.AccessRefreshCookies;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -17,6 +20,8 @@ public interface JwtService {
     String generateAccessToken(Map<String, Object> extraClaims, UserDetails userDetails);
 
     String generateRefreshToken(UserDetails userDetails);
+
+    AccessRefreshCookies buildAccessRefreshTokenCookies(String accessToken, String refreshToken);
 
     boolean isTokenValid(String token, UserDetails userDetails);
 }

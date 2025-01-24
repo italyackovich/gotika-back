@@ -1,48 +1,37 @@
 package ru.gotika.gotikaback.auth.util;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpCookie;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Component
 public class CookieUtil {
 
-    @Value("${jwt.accessToken.cookie-name}")
-    private String accessCookieName;
-
-    @Value("${jwt.refreshToken.cookie-name}")
-    private String refreshCookieName;
-
-    public HttpCookie createAccessTokenCookie(String accessToken, long expiration) {
-        return ResponseCookie.from(accessCookieName, accessToken)
-                .maxAge(expiration)
+    public ResponseCookie createCookie(String cookieName, String cookieValue, Long cookieExpiration) {
+        return ResponseCookie.from(cookieName, cookieValue)
+                .maxAge(cookieExpiration)
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
+                .sameSite("Strict")
                 .path("/")
                 .build();
     }
 
-    public HttpCookie createRefreshTokenCookie(String refreshToken, long expiration) {
-        return ResponseCookie.from(refreshCookieName, refreshToken)
-                .maxAge(expiration)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .build();
-    }
-
-    public HttpCookie deleteAccessTokenCookie() {
-        return ResponseCookie.from(accessCookieName, "")
+    public ResponseCookie deleteAccessTokenCookie(String cookieName) {
+        return ResponseCookie.from(cookieName, "")
                 .httpOnly(false)
                 .path("/")
                 .build();
     }
 
-    public HttpCookie deleteRefreshTokenCookie() {
-        return ResponseCookie.from(refreshCookieName, "")
-                .httpOnly(false)
-                .path("/")
-                .build();
+    public String getValueFromCookie(HttpServletRequest request, String cookieName) {
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(cookieName))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElseThrow();
     }
 }

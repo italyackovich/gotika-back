@@ -4,10 +4,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ru.gotika.gotikaback.auth.dto.AccessRefreshCookies;
 import ru.gotika.gotikaback.auth.service.JwtService;
+import ru.gotika.gotikaback.auth.util.CookieUtil;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -16,14 +21,17 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
     @Value("${jwt.secret}")
     private String secretKey;
     @Value("${jwt.accessToken.expiration}")
-    private long accessExpiration;
+    private Long accessExpiration;
     @Value("${jwt.refreshToken.expiration}")
-    private long refreshExpiration;
+    private Long refreshExpiration;
+
+    private final CookieUtil cookieUtil;
 
     @Override
     public String extractUsername(String token) {
@@ -51,10 +59,17 @@ public class JwtServiceImpl implements JwtService {
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
+    @Override
+    public AccessRefreshCookies buildAccessRefreshTokenCookies(String accessToken, String refreshToken) {
+        ResponseCookie accessTokenCookie = cookieUtil.createCookie("accessTokenCookie", accessToken, accessExpiration);
+        ResponseCookie refreshTokenCookie = cookieUtil.createCookie("refreshTokenCookie", refreshToken, refreshExpiration);
+        return new AccessRefreshCookies(accessTokenCookie, refreshTokenCookie);
+    }
+
     private String buildToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails,
-            long expiration
+            Long expiration
     ) {
         return Jwts
                 .builder()

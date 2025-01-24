@@ -3,14 +3,12 @@ package ru.gotika.gotikaback.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
+import org.apache.hc.core5.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-import ru.gotika.gotikaback.auth.dto.AuthRequest;
-import ru.gotika.gotikaback.auth.dto.AuthResponse;
-import ru.gotika.gotikaback.auth.dto.RegisterRequest;
+import ru.gotika.gotikaback.auth.dto.*;
 import ru.gotika.gotikaback.auth.service.AuthService;
 
 import java.io.IOException;
@@ -24,29 +22,44 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(
-            @RequestBody RegisterRequest request
-    ) {
-        return ResponseEntity.ok(authService.register(request));
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        try{
+            AuthResponse authResponse = authService.register(request);
+            AccessRefreshCookies cookieList = authResponse.getCookieList();
+            return ResponseEntity
+                    .ok()
+                    .header(HttpHeaders.SET_COOKIE, cookieList.getAccessTokenCookie().toString())
+                    .header(HttpHeaders.SET_COOKIE,cookieList.getRefreshTokenCookie().toString())
+                    .body(authResponse.getUserDto());
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(
-            @RequestBody AuthRequest request
-    ) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
-            return ResponseEntity.ok(authService.login(request));
+            AuthResponse authResponse = authService.login(request);
+            AccessRefreshCookies cookieList = authResponse.getCookieList();
+            return ResponseEntity
+                    .ok()
+                    .header(HttpHeaders.SET_COOKIE, cookieList.getAccessTokenCookie().toString())
+                    .header(HttpHeaders.SET_COOKIE,cookieList.getRefreshTokenCookie().toString())
+                    .body(authResponse.getUserDto());
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверный email или пароль");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email or password is incorrect: " + e.getMessage());
         }
     }
 
     @PostMapping("/refresh")
-    public void refresh(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        authService.refreshToken(request, response);
+    public ResponseEntity<?> refresh(HttpServletRequest request) throws IOException {
+        AuthResponse authResponse = authService.refreshToken(request);
+        AccessRefreshCookies cookieList = authResponse.getCookieList();
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, cookieList.getAccessTokenCookie().toString())
+                .header(HttpHeaders.SET_COOKIE,cookieList.getRefreshTokenCookie().toString())
+                .body(authResponse.getUserDto());
     }
 
 }
