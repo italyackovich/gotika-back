@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.common.service.CloudinaryService;
 import ru.gotika.gotikaback.user.dto.ChangeAddress;
 import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
+import ru.gotika.gotikaback.user.dto.ChangeUserCredentials;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
 import ru.gotika.gotikaback.user.models.User;
@@ -52,6 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto patchUser(Long id, ChangeAddress changeAddress) {
+        System.out.println(changeAddress);
         return userRepository.findById(id).map(user -> {
             user.setAddress(changeAddress.getAddress());
             userRepository.save(user);
@@ -75,6 +77,17 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             return userMapper.userToUserDto(user);
         }).orElseThrow(null);
+    }
+
+    @Override
+    public UserDto changeUser(Long id, ChangeUserCredentials userCredentials) {
+        return userRepository.findById(id).map(user -> {
+            user.setFirstName(userCredentials.getFirstName());
+            user.setLastName(userCredentials.getLastName());
+            user.setPhoneNumber(userCredentials.getPhoneNumber());
+            userRepository.save(user);
+            return userMapper.userToUserDto(user);
+        }).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override

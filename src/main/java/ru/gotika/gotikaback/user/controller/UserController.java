@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.user.dto.ChangeAddress;
 import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
+import ru.gotika.gotikaback.user.dto.ChangeUserCredentials;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.service.UserService;
 
@@ -42,6 +43,12 @@ public class UserController {
     @PatchMapping("/{id}/patch")
     public ResponseEntity<UserDto> patchUser(@PathVariable Long id, @RequestBody ChangeAddress changeAddress) {
         return ResponseEntity.ok(userService.patchUser(id, changeAddress));
+    }
+
+    @PatchMapping("/{id}/ch-cred")
+    public ResponseEntity<UserDto> changeUser(@PathVariable Long id, @RequestBody ChangeUserCredentials userCredentials){
+        System.out.println(userCredentials);
+        return ResponseEntity.ok(userService.changeUser(id, userCredentials));
     }
 
     @PatchMapping("/{id}/change-role")
