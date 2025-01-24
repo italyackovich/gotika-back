@@ -11,6 +11,21 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<String> handleExpiredJwtException(ExpiredJwtException e) {
-        return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).body("JWT expired: " + e.getMessage());
+    }
+
+    @ExceptionHandler(MissingCookieException.class)
+    public ResponseEntity<String> handleMissingCookieException(MissingCookieException e) {
+        return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body("Missing cookie: " + e.getMessage());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("User not found: " + e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<String> handleInvalidTokenException(InvalidTokenException e) {
+        return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body("Invalid token: " + e.getMessage());
     }
 }
