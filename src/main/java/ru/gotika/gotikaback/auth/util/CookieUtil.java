@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
+import ru.gotika.gotikaback.auth.exceptions.MissingCookieException;
 
 import java.util.Arrays;
 
@@ -28,10 +29,15 @@ public class CookieUtil {
     }
 
     public String getValueFromCookie(HttpServletRequest request, String cookieName) {
-        return Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(cookieName))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElseThrow();
+        try {
+            return Arrays.stream(request.getCookies())
+                    .filter(cookie -> cookie.getName().equals(cookieName))
+                    .findFirst()
+                    .map(Cookie::getValue)
+                    .orElseThrow();
+        } catch(NullPointerException ex) {
+            throw new MissingCookieException(cookieName);
+        }
+
     }
 }
