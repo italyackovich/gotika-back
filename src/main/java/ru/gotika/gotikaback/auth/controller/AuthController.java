@@ -16,7 +16,6 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final AuthService authService;
@@ -52,7 +51,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refresh(HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> refresh(HttpServletRequest request) {
         AuthResponse authResponse = authService.refreshToken(request);
         AccessRefreshCookies cookieList = authResponse.getCookieList();
         return ResponseEntity

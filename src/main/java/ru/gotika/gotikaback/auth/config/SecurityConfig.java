@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.auth.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.cors.CorsConfigurationSource;
 import ru.gotika.gotikaback.auth.filter.JwtAuthenticationFilter;
 
 
@@ -27,9 +29,9 @@ public class SecurityConfig {
     private final LogoutHandler logoutHandler;
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(AbstractHttpConfigurer::disable);
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource));
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/**").permitAll()
@@ -45,6 +47,12 @@ public class SecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider);
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling(handle -> handle
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Unauthorized access");
+                })
+        );
         http.logout(logout ->
                 logout.logoutUrl("api/v1/logout")
                         .addLogoutHandler(logoutHandler)

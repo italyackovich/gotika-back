@@ -7,7 +7,6 @@ import ru.gotika.gotikaback.user.service.PasswordResetService;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/v1/users/password-reset")
 public class PasswordResetController {
 
