@@ -18,7 +18,7 @@ public class Review {
     private Long id;
 
     @Column(nullable = false)
-    private Float rating;
+    private Integer rating;
 
     private String comment;
 
