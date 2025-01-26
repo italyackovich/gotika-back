@@ -44,11 +44,8 @@ jwt:
   secret: EJRNGJKERNHTRHNUI32895734GERGERGERG6BIJ36BNJKL4537I38KJB86HJ34B8HJ3B65JH8B3K8B3KJ8B
   accessToken:
     expiration: 900000
-    cookie-name: access
   refreshToken:
     expiration: 604800000
-    cookie-name: refresh
-
 cloudinary:
   url: cloudinary://171927165332578:6tqUCnBWHM6s7e3H0IivtgzV6O8@dsx6e6phm
 
