@@ -6,14 +6,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ru.gotika.gotikaback.auth.exceptions.TokenNotFoundException;
+import ru.gotika.gotikaback.auth.model.Token;
 import ru.gotika.gotikaback.auth.repository.TokenRepository;
 import ru.gotika.gotikaback.auth.service.LogoutService;
+import ru.gotika.gotikaback.auth.util.CookieUtil;
 
 @Service
 @RequiredArgsConstructor
 public class LogoutServiceImpl implements LogoutService {
 
     private final TokenRepository tokenRepository;
+    private final CookieUtil cookieUtil;
 
     @Override
     public void logout(
@@ -21,18 +25,17 @@ public class LogoutServiceImpl implements LogoutService {
             HttpServletResponse response,
             Authentication authentication
     ) {
-       final String authHeader = request.getHeader("Authorization");
        final String token;
-       if(authHeader == null || authHeader.startsWith("Bearer ")) {
-           return;
-       }
-       token = authHeader.substring(7);
-        var storedToken = tokenRepository.findByToken(token)
-                .orElse(null);
-        if (storedToken != null) {
-            storedToken.setIsRevoked(true);
-            tokenRepository.save(storedToken);
-            SecurityContextHolder.clearContext();
-        }
+
+       token = cookieUtil.getValueFromCookie(request, "accessTokenCookie");
+       Token storedToken = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new TokenNotFoundException(token));
+
+       storedToken.setIsRevoked(true);
+       tokenRepository.save(storedToken);
+       cookieUtil.deleteCookie("accessTokenCookie");
+       cookieUtil.deleteCookie("refreshTokenCookie");
+       SecurityContextHolder.clearContext();
+
     }
 }

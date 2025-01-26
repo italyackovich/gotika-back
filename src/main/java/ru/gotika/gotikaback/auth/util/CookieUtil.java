@@ -21,10 +21,12 @@ public class CookieUtil {
                 .build();
     }
 
-    public ResponseCookie deleteAccessTokenCookie(String cookieName) {
+    public ResponseCookie deleteCookie(String cookieName) {
         return ResponseCookie.from(cookieName, "")
                 .httpOnly(false)
                 .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
                 .build();
     }
 
