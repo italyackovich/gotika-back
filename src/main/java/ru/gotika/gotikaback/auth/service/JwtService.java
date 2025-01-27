@@ -1,11 +1,9 @@
 package ru.gotika.gotikaback.auth.service;
 
 import io.jsonwebtoken.Claims;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.gotika.gotikaback.auth.dto.AccessRefreshCookies;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 

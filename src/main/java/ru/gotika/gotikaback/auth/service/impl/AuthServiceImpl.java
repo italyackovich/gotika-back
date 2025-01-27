@@ -1,8 +1,6 @@
 package ru.gotika.gotikaback.auth.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,6 +49,8 @@ public class AuthServiceImpl implements AuthService {
         saveUserToken(user, accessToken);
         UserDto userDto = userMapper.userToUserDto(user);
 
+        log.info("New user with id = {} registered. accessToken = {}, refreshToken = {}", user.getId(), accessToken, refreshToken);
+
         return new AuthResponse(cookieList, userDto);
     }
 
@@ -74,6 +74,8 @@ public class AuthServiceImpl implements AuthService {
         saveUserToken(user, accessToken);
         UserDto userDto = userMapper.userToUserDto(user);
 
+        log.info("User with id = {} logged in", user.getId());
+
         return new AuthResponse(cookieList, userDto);
     }
 
@@ -84,9 +86,10 @@ public class AuthServiceImpl implements AuthService {
                 .isRevoked(false)
                 .build();
         tokenRepository.save(token);
+        log.info("Saved accessToken: {} for user with id = {}", accessToken, user.getId());
     }
 
-    private void revokeAllUserTokens(User user) {
+    public void revokeAllUserTokens(User user) {
         List<Token> validUserTokens = tokenRepository.findByUserIdAndIsRevokedFalse(user.getId());
         if (validUserTokens.isEmpty()) {
             return;
@@ -94,6 +97,7 @@ public class AuthServiceImpl implements AuthService {
         validUserTokens.forEach(token ->
                 token.setIsRevoked(true));
         tokenRepository.saveAll(validUserTokens);
+        log.info("All user's tokens with id = {} is revoked", user.getId());
     }
 
     @Override
@@ -114,6 +118,7 @@ public class AuthServiceImpl implements AuthService {
 
         CustomUserDetails customUserDetails = new CustomUserDetails(user);
         if (!jwtService.isTokenValid(refreshToken, customUserDetails)) {
+            log.warn("Token is invalid");
             throw new InvalidTokenException(refreshToken);
         }
         String accessToken = jwtService.generateAccessToken(customUserDetails);
@@ -121,6 +126,7 @@ public class AuthServiceImpl implements AuthService {
         saveUserToken(user, accessToken);
         UserDto userDto = userMapper.userToUserDto(user);
         AccessRefreshCookies cookieList = jwtService.buildAccessRefreshTokenCookies(accessToken, refreshToken);
+        log.info("Refreshing accessToken is success. New accessToken {}", accessToken);
         return new AuthResponse(cookieList, userDto);
 
     }
