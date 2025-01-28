@@ -1,7 +1,7 @@
 package ru.gotika.gotikaback.auth.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.gotika.gotikaback.auth.dto.*;
 import ru.gotika.gotikaback.auth.service.AuthService;
 
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -25,6 +24,7 @@ public class AuthController {
         try{
             AuthResponse authResponse = authService.register(request);
             AccessRefreshCookies cookieList = authResponse.getCookieList();
+
             return ResponseEntity
                     .ok()
                     .header(HttpHeaders.SET_COOKIE, cookieList.getAccessTokenCookie().toString())
