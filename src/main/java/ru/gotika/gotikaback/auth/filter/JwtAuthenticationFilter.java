@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +17,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.gotika.gotikaback.auth.exceptions.MissingCookieException;
-import ru.gotika.gotikaback.auth.repository.TokenRepository;
 import ru.gotika.gotikaback.auth.service.JwtService;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
 
@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
+    private final StringRedisTemplate stringRedisTemplate;
     private final CookieUtil cookieUtil;
 
     @Override
@@ -44,8 +44,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-
         final String jwt;
+
         try {
             jwt = cookieUtil.getValueFromCookie(request, "accessTokenCookie");
         } catch (MissingCookieException e) {
@@ -53,17 +53,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        final String userEmail;
 
+        final String userEmail;
 
         try {
             userEmail = jwtService.extractUsername(jwt);
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-                boolean isTokenValid = tokenRepository.findByToken(jwt)
-                        .map(t -> !t.getIsRevoked())
-                        .orElse(false);
-                if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
+
+                boolean isAccessTokenValid = Boolean.TRUE.equals(stringRedisTemplate.hasKey(userEmail));
+
+
+                if (jwtService.isTokenValid(jwt, userDetails) && isAccessTokenValid) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,

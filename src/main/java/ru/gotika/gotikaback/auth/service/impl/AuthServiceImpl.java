@@ -3,6 +3,8 @@ package ru.gotika.gotikaback.auth.service.impl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.auth.dto.*;
 import ru.gotika.gotikaback.auth.exceptions.InvalidTokenException;
+import ru.gotika.gotikaback.auth.exceptions.TokenNotFoundException;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
@@ -21,11 +24,15 @@ import ru.gotika.gotikaback.auth.service.AuthService;
 import ru.gotika.gotikaback.auth.service.JwtService;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
+    @Value("${jwt.accessToken.expiration}")
+    private Long accessExpiration;
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
@@ -34,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authManager;
     private final PasswordEncoder passwordEncoder;
     private final CookieUtil cookieUtil;
+    private final StringRedisTemplate stringRedisTemplate;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -46,7 +54,8 @@ public class AuthServiceImpl implements AuthService {
 
         AccessRefreshCookies cookieList = jwtService.buildAccessRefreshTokenCookies(accessToken, refreshToken);
 
-        saveUserToken(user, accessToken);
+        stringRedisTemplate.opsForValue().set(user.getEmail(), accessToken, accessExpiration, TimeUnit.MILLISECONDS);
+        saveUserToken(user, refreshToken);
         UserDto userDto = userMapper.userToUserDto(user);
 
         log.info("New user with id = {} registered. accessToken = {}, refreshToken = {}", user.getId(), accessToken, refreshToken);
@@ -55,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse  login(AuthRequest request) {
+    public AuthResponse login(AuthRequest request) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -71,7 +80,9 @@ public class AuthServiceImpl implements AuthService {
         AccessRefreshCookies cookieList = jwtService.buildAccessRefreshTokenCookies(accessToken, refreshToken);
 
         revokeAllUserTokens(user);
-        saveUserToken(user, accessToken);
+
+        stringRedisTemplate.opsForValue().set(user.getEmail(), accessToken, accessExpiration, TimeUnit.MILLISECONDS);
+        saveUserToken(user, refreshToken);
         UserDto userDto = userMapper.userToUserDto(user);
 
         log.info("User with id = {} logged in", user.getId());
@@ -79,17 +90,19 @@ public class AuthServiceImpl implements AuthService {
         return new AuthResponse(cookieList, userDto);
     }
 
-    private void saveUserToken(User user, String accessToken) {
+    private void saveUserToken(User user, String refreshToken) {
         Token token = Token.builder()
-                .token(accessToken)
+                .token(refreshToken)
                 .user(user)
                 .isRevoked(false)
                 .build();
         tokenRepository.save(token);
-        log.info("Saved accessToken: {} for user with id = {}", accessToken, user.getId());
+        log.info("Saved refreshToken: {} for user with id = {}", refreshToken, user.getId());
     }
 
     public void revokeAllUserTokens(User user) {
+        stringRedisTemplate.delete(user.getEmail());
+
         List<Token> validUserTokens = tokenRepository.findByUserIdAndIsRevokedFalse(user.getId());
         if (validUserTokens.isEmpty()) {
             return;
@@ -104,6 +117,17 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse refreshToken(HttpServletRequest request) {
 
         String refreshToken = cookieUtil.getValueFromCookie(request, "refreshTokenCookie");
+
+        boolean isRefreshTokenValid = tokenRepository.findByToken(refreshToken)
+                .map(token -> !token.getIsRevoked())
+                .orElseThrow(() -> {
+                    log.warn("Refresh token {} could not be found in the repository", refreshToken);
+                    return new TokenNotFoundException("Refresh token " + refreshToken + " could not be found in the repository");
+                });
+
+        if (!isRefreshTokenValid) {
+            throw new InvalidTokenException("Refresh token " + refreshToken + " is already revoked");
+        }
 
         String email = jwtService.extractUsername(refreshToken);
         if (email == null) {
@@ -123,11 +147,13 @@ public class AuthServiceImpl implements AuthService {
         }
         String accessToken = jwtService.generateAccessToken(customUserDetails);
         revokeAllUserTokens(user);
-        saveUserToken(user, accessToken);
+
+        stringRedisTemplate.opsForValue().set(user.getEmail(), accessToken, accessExpiration, TimeUnit.MILLISECONDS);
+
         UserDto userDto = userMapper.userToUserDto(user);
         AccessRefreshCookies cookieList = jwtService.buildAccessRefreshTokenCookies(accessToken, refreshToken);
         log.info("Refreshing accessToken is success. New accessToken {}", accessToken);
-        return new AuthResponse(cookieList, userDto);
 
+        return new AuthResponse(cookieList, userDto);
     }
 }
