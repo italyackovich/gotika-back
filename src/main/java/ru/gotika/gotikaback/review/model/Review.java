@@ -1,7 +1,5 @@
 package ru.gotika.gotikaback.review.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
