@@ -21,8 +21,8 @@ public class CookieUtil {
                 .build();
     }
 
-    public ResponseCookie deleteCookie(String cookieName) {
-        return ResponseCookie.from(cookieName, "")
+    public void deleteCookie(String cookieName) {
+        ResponseCookie.from(cookieName, "")
                 .httpOnly(false)
                 .path("/")
                 .maxAge(0)
