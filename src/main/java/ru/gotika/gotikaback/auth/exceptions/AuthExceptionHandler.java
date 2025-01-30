@@ -3,6 +3,7 @@ package ru.gotika.gotikaback.auth.exceptions;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -27,5 +28,10 @@ public class AuthExceptionHandler {
     @ExceptionHandler(TokenNotFoundException.class)
     public ResponseEntity<String> handleTokenNotFoundException(TokenNotFoundException e) {
         return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("Token not found: " + e.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
+        return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).body("Unauthorized: " + e.getMessage());
     }
 }

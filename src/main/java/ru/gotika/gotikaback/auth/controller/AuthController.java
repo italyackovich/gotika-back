@@ -21,33 +21,24 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try{
-            AuthResponse authResponse = authService.register(request);
-            AccessRefreshCookies cookieList = authResponse.getCookieList();
-
-            return ResponseEntity
-                    .ok()
-                    .header(HttpHeaders.SET_COOKIE, cookieList.getAccessTokenCookie().toString())
-                    .header(HttpHeaders.SET_COOKIE,cookieList.getRefreshTokenCookie().toString())
-                    .body(authResponse.getUserDto());
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-        }
+        AuthResponse authResponse = authService.register(request);
+        AccessRefreshCookies cookieList = authResponse.getCookieList();
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, cookieList.getAccessTokenCookie().toString())
+                .header(HttpHeaders.SET_COOKIE,cookieList.getRefreshTokenCookie().toString())
+                .body(authResponse.getUserDto());
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
-        try {
-            AuthResponse authResponse = authService.login(request);
-            AccessRefreshCookies cookieList = authResponse.getCookieList();
-            return ResponseEntity
-                    .ok()
-                    .header(HttpHeaders.SET_COOKIE, cookieList.getAccessTokenCookie().toString())
-                    .header(HttpHeaders.SET_COOKIE,cookieList.getRefreshTokenCookie().toString())
-                    .body(authResponse.getUserDto());
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email or password is incorrect: " + e.getMessage());
-        }
+        AuthResponse authResponse = authService.login(request);
+        AccessRefreshCookies cookieList = authResponse.getCookieList();
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, cookieList.getAccessTokenCookie().toString())
+                .header(HttpHeaders.SET_COOKIE,cookieList.getRefreshTokenCookie().toString())
+                .body(authResponse.getUserDto());
     }
 
     @PostMapping("/refresh")
