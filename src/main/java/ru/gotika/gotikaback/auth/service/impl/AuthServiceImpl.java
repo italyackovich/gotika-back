@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gotika.gotikaback.auth.dto.*;
 import ru.gotika.gotikaback.auth.exceptions.InvalidTokenException;
 import ru.gotika.gotikaback.auth.exceptions.TokenNotFoundException;
@@ -43,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
     private final CookieUtil cookieUtil;
     private final StringRedisTemplate stringRedisTemplate;
 
+    @Transactional
     @Override
     public AuthResponse register(RegisterRequest request) {
         User user = userMapper.registerRequestToUser(request);
@@ -63,6 +65,7 @@ public class AuthServiceImpl implements AuthService {
         return new AuthResponse(cookieList, userDto);
     }
 
+    @Transactional
     @Override
     public AuthResponse login(AuthRequest request) {
         authManager.authenticate(
@@ -100,6 +103,7 @@ public class AuthServiceImpl implements AuthService {
         log.info("Saved refreshToken: {} for user with id = {}", refreshToken, user.getId());
     }
 
+    @Transactional
     public void revokeAllUserTokens(User user) {
         stringRedisTemplate.delete(user.getEmail());
 
@@ -113,6 +117,7 @@ public class AuthServiceImpl implements AuthService {
         log.info("All user's tokens with id = {} is revoked", user.getId());
     }
 
+    @Transactional
     @Override
     public AuthResponse refreshToken(HttpServletRequest request) {
 
