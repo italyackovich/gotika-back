@@ -1,8 +1,8 @@
 package ru.gotika.gotikaback.review.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
 import ru.gotika.gotikaback.restaurant.repository.RestaurantRepository;
 import ru.gotika.gotikaback.review.dto.ReviewDto;
@@ -33,8 +33,8 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewMapper.reviewToReviewDto(reviewRepository.findById(id).orElse(null));
     }
 
-    @Override
     @Transactional
+    @Override
     public ReviewDto createReview(ReviewDto reviewDto) {
 
         if (reviewDto.getRating() < 1 || reviewDto.getRating() > 5) {
@@ -72,8 +72,8 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
-    @Override
     @Transactional
+    @Override
     public ReviewDto updateReview(Long id, ReviewDto reviewDto) {
         if (reviewDto.getRating() != null && (reviewDto.getRating() < 1 || reviewDto.getRating() > 5)) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
