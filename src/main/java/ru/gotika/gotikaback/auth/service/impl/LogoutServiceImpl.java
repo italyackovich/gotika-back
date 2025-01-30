@@ -7,10 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.gotika.gotikaback.auth.service.AuthService;
 import ru.gotika.gotikaback.auth.service.JwtService;
 import ru.gotika.gotikaback.auth.service.LogoutService;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
+import ru.gotika.gotikaback.auth.util.TokenUtil;
 import ru.gotika.gotikaback.user.exceptions.UserNotFoundException;
 import ru.gotika.gotikaback.user.models.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
@@ -23,7 +23,7 @@ public class LogoutServiceImpl implements LogoutService {
     private final UserRepository userRepository;
     private final CookieUtil cookieUtil;
     private final JwtService jwtService;
-    private final AuthService authService;
+    private final TokenUtil tokenUtil;
 
     @Override
     public void logout(
@@ -40,7 +40,7 @@ public class LogoutServiceImpl implements LogoutService {
            return new UserNotFoundException(userEmail);
        });
 
-       authService.revokeAllUserTokens(user);
+       tokenUtil.revokeAllUserTokens(user);
 
        cookieUtil.deleteCookie("accessTokenCookie");
        cookieUtil.deleteCookie("refreshTokenCookie");

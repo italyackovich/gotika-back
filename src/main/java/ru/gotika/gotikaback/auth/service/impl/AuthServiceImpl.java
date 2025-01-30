@@ -15,6 +15,7 @@ import ru.gotika.gotikaback.auth.dto.*;
 import ru.gotika.gotikaback.auth.exceptions.InvalidTokenException;
 import ru.gotika.gotikaback.auth.exceptions.TokenNotFoundException;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
+import ru.gotika.gotikaback.auth.util.TokenUtil;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
 import ru.gotika.gotikaback.auth.model.Token;
@@ -24,7 +25,6 @@ import ru.gotika.gotikaback.user.repository.UserRepository;
 import ru.gotika.gotikaback.auth.service.AuthService;
 import ru.gotika.gotikaback.auth.service.JwtService;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -43,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final CookieUtil cookieUtil;
     private final StringRedisTemplate stringRedisTemplate;
+    private final TokenUtil tokenUtil;
 
     @Transactional
     @Override
@@ -82,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
 
         AccessRefreshCookies cookieList = jwtService.buildAccessRefreshTokenCookies(accessToken, refreshToken);
 
-        revokeAllUserTokens(user);
+        tokenUtil.revokeAllUserTokens(user);
 
         stringRedisTemplate.opsForValue().set(user.getEmail(), accessToken, accessExpiration, TimeUnit.MILLISECONDS);
         saveUserToken(user, refreshToken);
@@ -101,20 +102,6 @@ public class AuthServiceImpl implements AuthService {
                 .build();
         tokenRepository.save(token);
         log.info("Saved refreshToken: {} for user with id = {}", refreshToken, user.getId());
-    }
-
-    @Transactional
-    public void revokeAllUserTokens(User user) {
-        stringRedisTemplate.delete(user.getEmail());
-
-        List<Token> validUserTokens = tokenRepository.findByUserIdAndIsRevokedFalse(user.getId());
-        if (validUserTokens.isEmpty()) {
-            return;
-        }
-        validUserTokens.forEach(token ->
-                token.setIsRevoked(true));
-        tokenRepository.saveAll(validUserTokens);
-        log.info("All user's tokens with id = {} is revoked", user.getId());
     }
 
     @Transactional
@@ -151,7 +138,7 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidTokenException(refreshToken);
         }
         String accessToken = jwtService.generateAccessToken(customUserDetails);
-        revokeAllUserTokens(user);
+        tokenUtil.revokeAllUserTokens(user);
 
         stringRedisTemplate.opsForValue().set(user.getEmail(), accessToken, accessExpiration, TimeUnit.MILLISECONDS);
 
