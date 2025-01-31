@@ -11,6 +11,15 @@ import java.util.Arrays;
 @Component
 public class CookieUtil {
 
+    /**
+     * Creates a new cookie based on the provided name,
+     * value and value of expiration of cookie.
+     *
+     * @param cookieName contains name of cookie
+     * @param cookieValue contains value of cookie
+     * @param cookieExpiration contains value of expiration of cookie
+     * @return a ResponseCookie containing the cookie
+     */
     public ResponseCookie createCookie(String cookieName, String cookieValue, Long cookieExpiration) {
         return ResponseCookie.from(cookieName, cookieValue)
                 .maxAge(cookieExpiration)
@@ -21,6 +30,11 @@ public class CookieUtil {
                 .build();
     }
 
+    /**
+     * Deletes the cookie based on the provided name of cookie.
+     *
+     * @param cookieName contains name of cookie
+     */
     public void deleteCookie(String cookieName) {
         ResponseCookie.from(cookieName, "")
                 .httpOnly(false)
@@ -30,6 +44,13 @@ public class CookieUtil {
                 .build();
     }
 
+    /**
+     * Returns value of cookie based on the provided name of cookie.
+     *
+     * @param request the HTTP request containing the cookies
+     * @param cookieName contains name of cookie
+     * @return a String containing the refresh or access token
+     */
     public String getValueFromCookie(HttpServletRequest request, String cookieName) {
         try {
             return Arrays.stream(request.getCookies())
