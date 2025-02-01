@@ -36,8 +36,8 @@ public class OrderController {
     public ResponseEntity<?> generateOrderReport(@RequestParam Long restaurantId) throws IOException {
         List<Order> orders = orderService.getOrdersForLastMonth(restaurantId);
 
-        File tempFile = new File("orders_report.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream))) {
             writer.write("Отчет заказов за последний месяц\n\n");
             for (Order order : orders) {
                 writer.write("ID заказа: " + order.getId() + "\n");
@@ -48,7 +48,7 @@ public class OrderController {
         }
 
         // Чтение файла в поток
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(tempFile));
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(outputStream.toByteArray()));
 
         // Отправляем файл пользователю
         HttpHeaders headers = new HttpHeaders();
@@ -56,7 +56,7 @@ public class OrderController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .headers(headers)
-                .contentLength(tempFile.length())
+                .contentLength(outputStream.size())
                 .contentType(MediaType.TEXT_PLAIN)
                 .body(resource);
     }
