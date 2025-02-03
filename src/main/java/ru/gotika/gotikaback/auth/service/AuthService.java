@@ -16,7 +16,7 @@ public interface AuthService {
      * then generates and returns authentication tokens (access and refresh).
      *
      * @param registerRequest contains user registration information (e.g., email, password)
-     * @return an AuthResponse containing the user data and token cookies
+     * @return an {@link AuthResponse} containing the user data and token cookies
      */
     AuthResponse register(RegisterRequest registerRequest);
 
@@ -25,16 +25,16 @@ public interface AuthService {
      * and generates new authentication tokens (access and refresh).
      *
      * @param authRequest contains user authentication details (e.g., email, password)
-     * @return an AuthResponse containing the user data and token cookies
+     * @return an {@link AuthResponse} containing the user data and token cookies
      */
     AuthResponse login(AuthRequest authRequest);
 
     /**
      * Generate a new access token if the refresh token is still valid,
-     * and returns an updated AuthResponse along with the token cookies
+     * and returns an updated {@link AuthResponse} along with the token cookies
      *
      * @param httpServletRequest the HTTP request containing the refresh token cookie
-     * @return an AuthResponse with the new access token and user data
+     * @return an {@link AuthResponse} with the new access token and user data
      * @throws InvalidTokenException if the provided refresh token is invalid
      * @throws IllegalArgumentException if the email extracted from the token is null
      * @throws UsernameNotFoundException if no user was found for the given email
