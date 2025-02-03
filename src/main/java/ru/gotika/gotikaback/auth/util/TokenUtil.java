@@ -20,7 +20,7 @@ public class TokenUtil {
     private final TokenRepository tokenRepository;
 
     /**
-     * Revokes all valid refresh tokens associated with the specified user,
+     * Revokes all valid refresh tokens associated with the specified {@link User},
      * preventing any further use of those tokens.
      *
      * @param user the user whose refresh tokens should be revoked
