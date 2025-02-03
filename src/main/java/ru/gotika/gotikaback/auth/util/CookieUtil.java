@@ -52,15 +52,11 @@ public class CookieUtil {
      * @return a String containing the refresh or access token
      */
     public String getValueFromCookie(HttpServletRequest request, String cookieName) {
-        try {
-            return Arrays.stream(request.getCookies())
-                    .filter(cookie -> cookie.getName().equals(cookieName))
-                    .findFirst()
-                    .map(Cookie::getValue)
-                    .orElseThrow();
-        } catch(NullPointerException ex) {
-            throw new MissingCookieException(cookieName);
-        }
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(cookieName))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElseThrow(() -> new MissingCookieException(cookieName));
 
     }
 }
