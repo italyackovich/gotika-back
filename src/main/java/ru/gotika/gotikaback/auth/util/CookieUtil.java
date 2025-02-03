@@ -18,7 +18,7 @@ public class CookieUtil {
      * @param cookieName contains name of cookie
      * @param cookieValue contains value of cookie
      * @param cookieExpiration contains value of expiration of cookie
-     * @return a ResponseCookie containing the cookie
+     * @return a {@link ResponseCookie} containing the cookie
      */
     public ResponseCookie createCookie(String cookieName, String cookieValue, Long cookieExpiration) {
         return ResponseCookie.from(cookieName, cookieValue)
@@ -45,7 +45,7 @@ public class CookieUtil {
     }
 
     /**
-     * Returns value of cookie based on the provided name of cookie.
+     * Returns value of cookie based on the provided {@link HttpServletRequest} and name of cookie.
      *
      * @param request the HTTP request containing the cookies
      * @param cookieName contains name of cookie
