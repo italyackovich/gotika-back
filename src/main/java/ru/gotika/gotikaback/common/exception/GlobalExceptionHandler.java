@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.common.exceptions;
+package ru.gotika.gotikaback.common.exception;
 
 import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,7 +6,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.gotika.gotikaback.user.exceptions.UserNotFoundException;
+import ru.gotika.gotikaback.user.exception.UserNotFoundException;
 
 import java.util.Map;
 import java.util.Optional;

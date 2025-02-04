@@ -4,7 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
-import ru.gotika.gotikaback.auth.exceptions.MissingCookieException;
+import ru.gotika.gotikaback.auth.exception.MissingCookieException;
 
 import java.util.Arrays;
 

@@ -1,8 +1,8 @@
 package ru.gotika.gotikaback.auth.service;
 
-import ru.gotika.gotikaback.auth.exceptions.TokenNotFoundException;
+import ru.gotika.gotikaback.auth.exception.TokenNotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import ru.gotika.gotikaback.auth.exceptions.InvalidTokenException;
+import ru.gotika.gotikaback.auth.exception.InvalidTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import ru.gotika.gotikaback.auth.dto.AuthResponse;
 import ru.gotika.gotikaback.auth.dto.AuthRequest;

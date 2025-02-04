@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.gotika.gotikaback.auth.exceptions.MissingCookieException;
+import ru.gotika.gotikaback.auth.exception.MissingCookieException;
 import ru.gotika.gotikaback.auth.service.JwtService;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
 

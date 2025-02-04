@@ -1,6 +1,7 @@
-package ru.gotika.gotikaback.auth.exceptions;
+package ru.gotika.gotikaback.auth.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -11,10 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class AuthExceptionHandler {
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<Map<String, String>> handleExpiredJwtException(ExpiredJwtException e) {
+
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Expired JWT token");
         errorResponse.put("message", e.getMessage());

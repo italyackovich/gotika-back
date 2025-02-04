@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.auth.exceptions;
+package ru.gotika.gotikaback.auth.exception;
 
 import java.io.Serial;
 import java.io.Serializable;
