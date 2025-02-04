@@ -7,33 +7,49 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class AuthExceptionHandler {
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<String> handleExpiredJwtException(ExpiredJwtException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT expired: " + e.getMessage());
+    public ResponseEntity<Map<String, String>> handleExpiredJwtException(ExpiredJwtException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Expired JWT token");
+        errorResponse.put("message", e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler(MissingCookieException.class)
-    public ResponseEntity<String> handleMissingCookieException(MissingCookieException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing cookie: " + e.getMessage());
+    public ResponseEntity<Map<String, String>> handleMissingCookieException(MissingCookieException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Missing cookie");
+        errorResponse.put("message", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<String> handleInvalidTokenException(InvalidTokenException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());
+    public ResponseEntity<Map<String, String>> handleInvalidTokenException(InvalidTokenException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Invalid token");
+        errorResponse.put("message", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(TokenNotFoundException.class)
-    public ResponseEntity<String> handleTokenNotFoundException(TokenNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found: " + e.getMessage());
+    public ResponseEntity<Map<String, String>> handleTokenNotFoundException(TokenNotFoundException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Token not found");
+        errorResponse.put("message", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: " + e.getMessage());
+    public ResponseEntity<Map<String, String>> handleAuthenticationException(AuthenticationException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Authentication failed");
+        errorResponse.put("message", e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 }
