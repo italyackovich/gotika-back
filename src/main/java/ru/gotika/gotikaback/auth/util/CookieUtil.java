@@ -50,6 +50,7 @@ public class CookieUtil {
      * @param request the HTTP request containing the cookies
      * @param cookieName contains name of cookie
      * @return a String containing the refresh or access token
+     * @throws MissingCookieException if cookie is missing
      */
     public String getValueFromCookie(HttpServletRequest request, String cookieName) {
         return Arrays.stream(request.getCookies())
