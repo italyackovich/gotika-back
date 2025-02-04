@@ -1,8 +1,8 @@
-package ru.gotika.gotikaback.common.validators;
+package ru.gotika.gotikaback.common.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import ru.gotika.gotikaback.common.annotations.ValidPassword;
+import ru.gotika.gotikaback.common.annotation.ValidPassword;
 
 public class PasswordValidator implements ConstraintValidator<ValidPassword, String> {
 

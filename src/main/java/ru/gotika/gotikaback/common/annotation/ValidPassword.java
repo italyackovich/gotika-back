@@ -1,8 +1,8 @@
-package ru.gotika.gotikaback.common.annotations;
+package ru.gotika.gotikaback.common.annotation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import ru.gotika.gotikaback.common.validators.PasswordValidator;
+import ru.gotika.gotikaback.common.validator.PasswordValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

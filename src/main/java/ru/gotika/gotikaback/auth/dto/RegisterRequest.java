@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gotika.gotikaback.common.annotations.ValidPassword;
+import ru.gotika.gotikaback.common.annotation.ValidPassword;
 
 @Data
 @NoArgsConstructor
