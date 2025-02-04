@@ -2,10 +2,10 @@ package ru.gotika.gotikaback.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.gotika.gotikaback.common.annotations.ValidPassword;
 
 @Data
 @NoArgsConstructor
@@ -22,8 +22,7 @@ public class RegisterRequest {
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Password cannot be blank")
-    @Size(min = 8, max = 50, message = "Password must be between 8 and 50 characters")
+    @ValidPassword
     private String password;
 
 }
