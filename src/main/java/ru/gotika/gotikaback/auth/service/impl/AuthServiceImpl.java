@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gotika.gotikaback.auth.dto.*;
+import ru.gotika.gotikaback.auth.enums.TokenType;
 import ru.gotika.gotikaback.auth.exception.InvalidTokenException;
 import ru.gotika.gotikaback.auth.exception.TokenNotFoundException;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
@@ -69,14 +70,14 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public AuthResponse login(AuthRequest request) {
-        authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
+        authManager.authenticate(new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
-                        request.getPassword()
-                )
+                        request.getPassword())
         );
+
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
+
         CustomUserDetails customUserDetails = new CustomUserDetails(user);
         String accessToken = jwtService.generateAccessToken(customUserDetails);
         String refreshToken = jwtService.generateRefreshToken(customUserDetails);
@@ -97,6 +98,7 @@ public class AuthServiceImpl implements AuthService {
     private void saveUserToken(User user, String refreshToken) {
         Token token = Token.builder()
                 .token(refreshToken)
+                .tokenType(TokenType.BEARER)
                 .user(user)
                 .isRevoked(false)
                 .build();
@@ -126,6 +128,7 @@ public class AuthServiceImpl implements AuthService {
             log.error("Email is null");
             throw new IllegalArgumentException("Email cannot be null");
         }
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->{
                     log.warn("User not found for email: {}", email);
@@ -137,6 +140,7 @@ public class AuthServiceImpl implements AuthService {
             log.warn("Token is invalid");
             throw new InvalidTokenException(refreshToken);
         }
+
         String accessToken = jwtService.generateAccessToken(customUserDetails);
         tokenUtil.revokeAllUserTokens(user);
 

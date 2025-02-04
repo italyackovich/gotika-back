@@ -19,12 +19,13 @@ public class Token {
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String token;
 
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
 
+    @Column(nullable = false)
     private Boolean isRevoked;
 
     @ManyToOne
