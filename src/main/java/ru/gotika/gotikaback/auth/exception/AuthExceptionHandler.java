@@ -17,7 +17,7 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<Map<String, String>> handleExpiredJwtException(ExpiredJwtException e) {
-
+        log.error("Error occurred: ", e);
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Expired JWT token");
         errorResponse.put("message", e.getMessage());
@@ -26,6 +26,7 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler(MissingCookieException.class)
     public ResponseEntity<Map<String, String>> handleMissingCookieException(MissingCookieException e) {
+        log.error("Error occurred: ", e);
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Missing cookie");
         errorResponse.put("message", e.getMessage());
@@ -34,6 +35,7 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<Map<String, String>> handleInvalidTokenException(InvalidTokenException e) {
+        log.error("Error occurred: ", e);
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Invalid token");
         errorResponse.put("message", e.getMessage());
@@ -42,6 +44,7 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler(TokenNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTokenNotFoundException(TokenNotFoundException e) {
+        log.error("Error occurred: ", e);
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Token not found");
         errorResponse.put("message", e.getMessage());
@@ -50,6 +53,7 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, String>> handleAuthenticationException(AuthenticationException e) {
+        log.error("Error occurred: ", e);
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Authentication failed");
         errorResponse.put("message", e.getMessage());
