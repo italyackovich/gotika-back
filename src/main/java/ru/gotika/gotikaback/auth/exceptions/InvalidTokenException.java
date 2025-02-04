@@ -1,7 +1,18 @@
 package ru.gotika.gotikaback.auth.exceptions;
 
-public class InvalidTokenException extends RuntimeException {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class InvalidTokenException extends RuntimeException implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     public InvalidTokenException(final String message) {
         super(message);
+    }
+
+    public InvalidTokenException(final String message, final Throwable cause) {
+        super(message, cause);
     }
 }
