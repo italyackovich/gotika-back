@@ -120,6 +120,7 @@ public class AuthServiceImpl implements AuthService {
                 });
 
         if (!isRefreshTokenValid) {
+            log.warn("Token is invalid");
             throw new InvalidTokenException("Refresh token " + refreshToken + " is already revoked");
         }
 
