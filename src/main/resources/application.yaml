@@ -5,9 +5,9 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
   datasource:
-    url: jdbc:postgresql://localhost:5432/gotikaDB
-    username: postgres
-    password: postgres
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -21,12 +21,12 @@ spring:
 #        format_sql: true
   security:
     user:
-      password: yeat
+      password: ${SECURITY_PASSWORD}
   mail:
     host: smtp.mail.ru
-    port: 587
-    username: gotika.no-reply@mail.ru
-    password: vfz82icvRUBzuYNXm8y8
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -38,18 +38,18 @@ spring:
   data:
     redis:
       host: localhost
-      port: 6379
+      port: ${REDIS_PORT}
 
 jwt:
-  secret: EJRNGJKERNHTRHNUI32895734GERGERGERG6BIJ36BNJKL4537I38KJB86HJ34B8HJ3B65JH8B3K8B3KJ8B
+  secret: ${JWT_SECRET_KEY}
   accessToken:
     expiration: 900000
   refreshToken:
     expiration: 604800000
 cloudinary:
-  url: cloudinary://171927165332578:6tqUCnBWHM6s7e3H0IivtgzV6O8@dsx6e6phm
+  url: ${CLOUDINARY_URL}
 
 yookassa:
-  shop-id: 999174
-  secret-key: test_6GJwionocOkNcVs9kXmfSdW63Pd6VyRc9_VDmDL_2Ko
+  shop-id: ${YOOKASSA_SHOP_ID}
+  secret-key: ${YOOKASSA_SECRET_KEY}
   api-url: https://api.yookassa.ru/v3/payments
