@@ -19,9 +19,9 @@ public class PasswordResetController {
     }
 
     @PostMapping("/confirm")
-    public String confirmReset(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) {
+    public ResponseEntity<String> confirmReset(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) {
         passwordResetService.validateResetCode(email, code, newPassword);
-        return "Пароль успешно изменён.";
+        return ResponseEntity.ok("Пароль успешно изменён.");
     }
 
 }

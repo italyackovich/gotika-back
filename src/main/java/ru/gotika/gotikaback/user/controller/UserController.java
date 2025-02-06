@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,28 +31,28 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto) {
         return ResponseEntity.ok(userService.createUser(userDto));
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id ,@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id ,@RequestBody @Valid UserDto userDto) {
         return ResponseEntity.ok(userService.updateUser(id, userDto));
     }
 
     @PatchMapping("/{id}/patch")
-    public ResponseEntity<UserDto> patchUser(@PathVariable Long id, @RequestBody ChangeAddress changeAddress) {
-        return ResponseEntity.ok(userService.patchUser(id, changeAddress));
+    public ResponseEntity<UserDto> changeUserAddress(@PathVariable Long id, @RequestBody @Valid ChangeAddress changeAddress) {
+        return ResponseEntity.ok(userService.changeUserAddress(id, changeAddress));
     }
 
     @PatchMapping("/{id}/ch-cred")
-    public ResponseEntity<UserDto> changeUser(@PathVariable Long id, @RequestBody ChangeUserCredentials userCredentials){
+    public ResponseEntity<UserDto> changeUserCred(@PathVariable Long id, @RequestBody @Valid ChangeUserCredentials userCredentials){
         System.out.println(userCredentials);
-        return ResponseEntity.ok(userService.changeUser(id, userCredentials));
+        return ResponseEntity.ok(userService.changeUserCred(id, userCredentials));
     }
 
     @PatchMapping("/{id}/change-role")
-    public ResponseEntity<UserDto> changeRole(@PathVariable Long id, @RequestBody ChangeRoleDto changeRoleDto) {
+    public ResponseEntity<UserDto> changeRole(@PathVariable Long id, @RequestBody @Valid ChangeRoleDto changeRoleDto) {
         return ResponseEntity.ok(userService.changeRole(id, changeRoleDto));
     }
 
