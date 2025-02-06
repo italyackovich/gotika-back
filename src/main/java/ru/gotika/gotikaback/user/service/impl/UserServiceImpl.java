@@ -1,6 +1,7 @@
 package ru.gotika.gotikaback.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.common.service.CloudinaryService;
@@ -8,6 +9,7 @@ import ru.gotika.gotikaback.user.dto.ChangeAddress;
 import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.ChangeUserCredentials;
 import ru.gotika.gotikaback.user.dto.UserDto;
+import ru.gotika.gotikaback.user.exception.UserNotFoundException;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
 import ru.gotika.gotikaback.user.model.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -30,7 +33,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(Long id) {
-        return userMapper.userToUserDto(userRepository.findById(id).orElse(null));
+        return userMapper.userToUserDto(userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found")));
     }
 
     @Override
@@ -48,7 +52,7 @@ public class UserServiceImpl implements UserService {
             updatedUser.setPassword(user.getPassword());
             userRepository.save(updatedUser);
             return userMapper.userToUserDto(updatedUser);
-        }).orElseThrow(() -> new RuntimeException("User not found"));
+        }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     @Override
@@ -58,7 +62,7 @@ public class UserServiceImpl implements UserService {
             user.setAddress(changeAddress.getAddress());
             userRepository.save(user);
             return userMapper.userToUserDto(user);
-        }).orElseThrow(() -> new RuntimeException("User not found"));
+        }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     @Override
@@ -67,7 +71,7 @@ public class UserServiceImpl implements UserService {
             user.setRole(changeRoleDto.getRole());
             userRepository.save(user);
             return userMapper.userToUserDto(user);
-        }).orElseThrow(null);
+        }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     @Override
@@ -76,7 +80,7 @@ public class UserServiceImpl implements UserService {
             user.setImageUrl(cloudinaryService.uploadFile(image));
             userRepository.save(user);
             return userMapper.userToUserDto(user);
-        }).orElseThrow(null);
+        }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     @Override
@@ -87,7 +91,7 @@ public class UserServiceImpl implements UserService {
             user.setPhoneNumber(userCredentials.getPhoneNumber());
             userRepository.save(user);
             return userMapper.userToUserDto(user);
-        }).orElseThrow(() -> new RuntimeException("User not found"));
+        }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     @Override
