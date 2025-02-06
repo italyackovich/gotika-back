@@ -115,12 +115,12 @@ public class AuthServiceImpl implements AuthService {
         boolean isRefreshTokenValid = tokenRepository.findByToken(refreshToken)
                 .map(token -> !token.getIsRevoked())
                 .orElseThrow(() -> {
-                    log.warn("Refresh token {} could not be found in the repository", refreshToken);
+                    log.error("Refresh token {} could not be found in the repository", refreshToken);
                     return new TokenNotFoundException("Refresh token " + refreshToken + " could not be found in the repository");
                 });
 
         if (!isRefreshTokenValid) {
-            log.warn("Token is invalid");
+            log.error("Token is invalid");
             throw new InvalidTokenException("Refresh token " + refreshToken + " is already revoked");
         }
 
@@ -132,13 +132,13 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->{
-                    log.warn("User not found for email: {}", email);
+                    log.error("User not found for email: {}", email);
                     return new UsernameNotFoundException("Incorrect user's email -> " + email);
                 });
 
         CustomUserDetails customUserDetails = new CustomUserDetails(user);
         if (!jwtService.isTokenValid(refreshToken, customUserDetails)) {
-            log.warn("Token is invalid");
+            log.error("Token is invalid");
             throw new InvalidTokenException(refreshToken);
         }
 

@@ -36,7 +36,7 @@ public class LogoutServiceImpl implements LogoutService {
        token = cookieUtil.getValueFromCookie(request, "accessTokenCookie");
        String userEmail = jwtService.extractUsername(token);
        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> {
-           log.warn("User with email {} not found", userEmail);
+           log.error("User with email {} not found", userEmail);
            return new UserNotFoundException(userEmail);
        });
 
