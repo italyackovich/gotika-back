@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class AuthController {
             }
     )
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest request) {
         AuthResponse authResponse = authService.register(request);
         AccessRefreshCookies cookieList = authResponse.getCookieList();
         return ResponseEntity
@@ -73,7 +74,7 @@ public class AuthController {
             }
     )
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         AuthResponse authResponse = authService.login(request);
         AccessRefreshCookies cookieList = authResponse.getCookieList();
         return ResponseEntity
