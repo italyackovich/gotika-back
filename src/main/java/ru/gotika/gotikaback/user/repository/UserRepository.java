@@ -1,7 +1,7 @@
 package ru.gotika.gotikaback.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 
 import java.util.Optional;
 

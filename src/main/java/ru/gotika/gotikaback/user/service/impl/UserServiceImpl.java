@@ -9,7 +9,7 @@ import ru.gotika.gotikaback.user.dto.ChangeRoleDto;
 import ru.gotika.gotikaback.user.dto.ChangeUserCredentials;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
 import ru.gotika.gotikaback.user.service.UserService;
 

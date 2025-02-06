@@ -12,7 +12,7 @@ import ru.gotika.gotikaback.auth.service.LogoutService;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
 import ru.gotika.gotikaback.auth.util.TokenUtil;
 import ru.gotika.gotikaback.user.exception.UserNotFoundException;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
 
 @Service

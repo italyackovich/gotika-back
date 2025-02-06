@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gotika.gotikaback.auth.enums.TokenType;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 
 @Entity
 @Data

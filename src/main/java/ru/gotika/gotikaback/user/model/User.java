@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.user.models;
+package ru.gotika.gotikaback.user.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

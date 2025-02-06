@@ -20,7 +20,7 @@ import ru.gotika.gotikaback.auth.util.TokenUtil;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
 import ru.gotika.gotikaback.auth.model.Token;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 import ru.gotika.gotikaback.auth.repository.TokenRepository;
 import ru.gotika.gotikaback.user.repository.UserRepository;
 import ru.gotika.gotikaback.auth.service.AuthService;

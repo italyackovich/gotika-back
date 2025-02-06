@@ -4,7 +4,7 @@ import org.mapstruct.*;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
 import ru.gotika.gotikaback.review.dto.ReviewDto;
 import ru.gotika.gotikaback.review.model.Review;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 
 import java.util.List;
 

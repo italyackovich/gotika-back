@@ -3,7 +3,7 @@ package ru.gotika.gotikaback.review.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 
 import java.time.LocalDateTime;
 

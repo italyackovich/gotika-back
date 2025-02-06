@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gotika.gotikaback.auth.model.Token;
 import ru.gotika.gotikaback.auth.repository.TokenRepository;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 
 import java.util.List;
 

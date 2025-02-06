@@ -6,7 +6,7 @@ import ru.gotika.gotikaback.restaurant.model.Restaurant;
 import ru.gotika.gotikaback.auth.dto.RegisterRequest;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.enums.Role;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 
 import java.util.List;
 

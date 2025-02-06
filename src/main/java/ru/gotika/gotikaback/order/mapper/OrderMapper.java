@@ -5,7 +5,7 @@ import ru.gotika.gotikaback.order.dto.OrderDto;
 import ru.gotika.gotikaback.order.enums.Status;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;

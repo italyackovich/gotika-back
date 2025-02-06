@@ -6,7 +6,7 @@ import lombok.Data;
 import ru.gotika.gotikaback.menu.model.Menu;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.review.model.Review;
-import ru.gotika.gotikaback.user.models.User;
+import ru.gotika.gotikaback.user.model.User;
 
 import java.util.List;
 
