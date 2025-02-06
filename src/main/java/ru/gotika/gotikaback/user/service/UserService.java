@@ -13,9 +13,9 @@ public interface UserService {
     UserDto getUser(Long id);
     UserDto createUser(UserDto userDto);
     UserDto updateUser(Long id, UserDto userDto);
-    UserDto patchUser(Long id, ChangeAddress changeAddress);
+    UserDto changeUserAddress(Long id, ChangeAddress changeAddress);
     UserDto changeRole(Long id, ChangeRoleDto changeRoleDto);
     UserDto changeImage(Long id, MultipartFile image);
-    UserDto changeUser(Long id, ChangeUserCredentials userCredentials);
+    UserDto changeUserCred(Long id, ChangeUserCredentials userCredentials);
     void deleteUser(Long id);
 }
