@@ -1,8 +1,13 @@
 package ru.gotika.gotikaback.user.service;
 
+import ru.gotika.gotikaback.user.dto.ChangePassword;
+import ru.gotika.gotikaback.user.dto.ChangePasswordResponse;
+import ru.gotika.gotikaback.user.dto.ConfirmResetPassword;
+import ru.gotika.gotikaback.user.dto.RequestResetPassword;
+
 public interface PasswordResetService {
 
-    void sendResetCode(String email);
-    void validateResetCode(String email, String code, String newPassword);
-    void resetPassword(String email, String newPassword);
+    ChangePasswordResponse sendResetCode(RequestResetPassword requestResetPassword);
+    ChangePasswordResponse validateResetCode(ConfirmResetPassword confirmResetPassword);
+    ChangePasswordResponse resetPassword(ChangePassword changePassword);
 }
