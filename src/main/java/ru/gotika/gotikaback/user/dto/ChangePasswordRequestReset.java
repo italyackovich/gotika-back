@@ -11,7 +11,7 @@ import ru.gotika.gotikaback.common.annotation.ValidPassword;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChangePasswordRequest {
+public class ChangePasswordRequestReset {
 
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Email format is incorrect")
