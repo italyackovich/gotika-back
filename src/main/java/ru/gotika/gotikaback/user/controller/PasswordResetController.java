@@ -1,8 +1,13 @@
 package ru.gotika.gotikaback.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.gotika.gotikaback.user.dto.ChangePassword;
+import ru.gotika.gotikaback.user.dto.ChangePasswordResponse;
+import ru.gotika.gotikaback.user.dto.ConfirmResetPassword;
+import ru.gotika.gotikaback.user.dto.RequestResetPassword;
 import ru.gotika.gotikaback.user.service.PasswordResetService;
 
 @RestController
@@ -13,15 +18,20 @@ public class PasswordResetController {
     private final PasswordResetService passwordResetService;
 
     @PostMapping("/request")
-    public ResponseEntity<String> request(@RequestParam String email) {
-        passwordResetService.sendResetCode(email);
-        return ResponseEntity.ok("Код сброса отправлен.");
+    public ResponseEntity<ChangePasswordResponse> requestReset(@RequestBody @Valid RequestResetPassword requestResetPassword) {
+        return ResponseEntity.ok(passwordResetService.sendResetCode(requestResetPassword));
     }
 
     @PostMapping("/confirm")
-    public ResponseEntity<String> confirmReset(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) {
-        passwordResetService.validateResetCode(email, code, newPassword);
-        return ResponseEntity.ok("Пароль успешно изменён.");
+    public ResponseEntity<ChangePasswordResponse> confirmReset(@RequestBody @Valid ConfirmResetPassword confirmResetPassword) {
+        return ResponseEntity.ok(passwordResetService.validateResetCode(confirmResetPassword));
     }
+
+    @PostMapping("/reset")
+    public ResponseEntity<ChangePasswordResponse> passwordReset(@RequestBody @Valid ChangePassword changePassword) {
+        return ResponseEntity.ok(passwordResetService.resetPassword(changePassword));
+    }
+
+
 
 }
