@@ -13,12 +13,6 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: true
-  #    database: postgresql
-#    database-platform: org.hibernate.dialect.PostgreSQLDialect
-#    show-sql: false
-#    properties:
-#      hibernate:
-#        format_sql: true
   security:
     user:
       password: ${SECURITY_PASSWORD}
@@ -48,7 +42,6 @@ jwt:
     expiration: 604800000
 cloudinary:
   url: ${CLOUDINARY_URL}
-
 yookassa:
   shop-id: ${YOOKASSA_SHOP_ID}
   secret-key: ${YOOKASSA_SECRET_KEY}

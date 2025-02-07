@@ -15,7 +15,7 @@ public class CodeStorageServiceImpl implements CodeStorageService {
 
     @Override
     public void saveCode(String email, String code) {
-        redisTemplate.opsForValue().set(email, code, 5, TimeUnit.MINUTES); // Срок жизни - 5 минут
+        redisTemplate.opsForValue().set(email, code, 5, TimeUnit.MINUTES);
     }
 
     @Override
