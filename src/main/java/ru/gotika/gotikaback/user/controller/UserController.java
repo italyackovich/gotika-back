@@ -40,7 +40,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(id, userDto));
     }
 
-    @PatchMapping("/{id}/patch")
+    @PatchMapping("/{id}/ch-address")
     public ResponseEntity<UserDto> changeUserAddress(@PathVariable Long id, @RequestBody @Valid ChangeAddress changeAddress) {
         return ResponseEntity.ok(userService.changeUserAddress(id, changeAddress));
     }
@@ -51,12 +51,12 @@ public class UserController {
         return ResponseEntity.ok(userService.changeUserCred(id, userCredentials));
     }
 
-    @PatchMapping("/{id}/change-role")
+    @PatchMapping("/{id}/ch-role")
     public ResponseEntity<UserDto> changeRole(@PathVariable Long id, @RequestBody @Valid ChangeRoleDto changeRoleDto) {
         return ResponseEntity.ok(userService.changeRole(id, changeRoleDto));
     }
 
-    @PatchMapping("/{id}/change-img")
+    @PatchMapping("/{id}/ch-image")
     public ResponseEntity<UserDto> changeImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(userService.changeImage(id, file));
     }
