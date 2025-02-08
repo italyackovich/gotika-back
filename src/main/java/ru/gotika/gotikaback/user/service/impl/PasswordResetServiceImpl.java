@@ -30,12 +30,12 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     public ChangePasswordResponse sendResetCode(RequestResetPassword requestResetPassword) {
         String email = requestResetPassword.getEmail();
         if (!userRepository.existsByEmail(email)) {
-            log.error("User with email {} not found", email);
             throw new UserNotFoundException("User with email " + email + " not found");
         }
         String code = CodeGenerator.generateCode();
         codeStorageService.saveCode(email, code);
         emailService.sendEmail(email, "Сброс пароля", "Ваш код для сброса пароля: " + code);
+        log.info("Reset code sent to {}", email);
         return ChangePasswordResponse.builder().message("Код для сброса пароля отправлен на почту").build();
     }
 
@@ -48,6 +48,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
             log.warn("Reset password code is not valid for user with email {}", email);
             return ChangePasswordResponse.builder().message("Код для сброса пароля отсутствует или некорректен").success(false).build();
         }
+        log.info("Reset password code validated for user with email {}", email);
         return ChangePasswordResponse.builder().success(true).build();
     }
 
@@ -63,6 +64,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+        log.info("New password reset successful for user with email {}", email);
         codeStorageService.deleteCode(email);
         return ChangePasswordResponse.builder().build();
     }
