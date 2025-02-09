@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto changeUserAddress(Long id, ChangeAddress changeAddress) {
+    public UserDto changeAddress(Long id, ChangeAddress changeAddress) {
         return userRepository.findById(id).map(user -> {
             user.setAddress(changeAddress.getAddress());
             userRepository.save(user);
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto changeUserCred(Long id, ChangeUserCredentials userCredentials) {
+    public UserDto changeCred(Long id, ChangeUserCredentials userCredentials) {
         return userRepository.findById(id).map(user -> {
             user.setFirstName(userCredentials.getFirstName());
             user.setLastName(userCredentials.getLastName());

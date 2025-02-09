@@ -54,7 +54,7 @@ public interface UserService {
      *                      Must not be a null.
      * @return an {@link UserDto} containing user's data with updated address.
      */
-    UserDto changeUserAddress(Long id, ChangeAddress changeAddress);
+    UserDto changeAddress(Long id, ChangeAddress changeAddress);
 
     /**
      * Changes user's role by {@code id} and {@link ChangeRoleDto}.
@@ -86,7 +86,7 @@ public interface UserService {
      *                        Must not be a null.
      * @return an {@link UserDto} containing user's data with updated credentials.
      */
-    UserDto changeUserCred(Long id, ChangeUserCredentials userCredentials);
+    UserDto changeCred(Long id, ChangeUserCredentials userCredentials);
 
     /**
      * Deletes user by {@code id}.

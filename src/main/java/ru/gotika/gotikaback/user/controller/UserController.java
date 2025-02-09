@@ -139,7 +139,7 @@ public class UserController {
     )
     @PatchMapping("/{id}/ch-address")
     public ResponseEntity<UserDto> changeUserAddress(@PathVariable Long id, @RequestBody @Valid ChangeAddress changeAddress) {
-        return ResponseEntity.ok(userService.changeUserAddress(id, changeAddress));
+        return ResponseEntity.ok(userService.changeAddress(id, changeAddress));
     }
 
     @Operation(
@@ -169,7 +169,7 @@ public class UserController {
     @PatchMapping("/{id}/ch-cred")
     public ResponseEntity<UserDto> changeUserCred(@PathVariable Long id, @RequestBody @Valid ChangeUserCredentials userCredentials){
         System.out.println(userCredentials);
-        return ResponseEntity.ok(userService.changeUserCred(id, userCredentials));
+        return ResponseEntity.ok(userService.changeCred(id, userCredentials));
     }
 
     @Operation(
