@@ -22,7 +22,11 @@ public class ReviewDto {
     private Integer rating;
     private String comment;
     private LocalDateTime createdAt;
+
+    @NotNull(message = "User id cannot be null")
     private Long userId;
+
+    @NotNull(message = "User id cannot be null")
     private Long restaurantId;
     private UserDto user;
 }
