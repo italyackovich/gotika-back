@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.review.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +27,12 @@ public class ReviewController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDto reviewDto) {
+    public ResponseEntity<ReviewDto> createReview(@RequestBody @Valid ReviewDto reviewDto) {
         return ResponseEntity.ok(reviewService.createReview(reviewDto));
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewDto reviewDto) {
+    public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody @Valid ReviewDto reviewDto) {
         return ResponseEntity.ok(reviewService.updateReview(id, reviewDto));
     }
 
