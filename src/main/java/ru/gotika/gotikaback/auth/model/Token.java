@@ -1,8 +1,6 @@
 package ru.gotika.gotikaback.auth.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,14 +19,12 @@ public class Token {
     @GeneratedValue
     private Long id;
 
-    @NotBlank(message = "Token cannot be blank")
     @Column(unique = true, nullable = false)
     private String token;
 
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
 
-    @NotNull(message = "IsRevoked cannot be null")
     @Column(nullable = false)
     private Boolean isRevoked;
 
