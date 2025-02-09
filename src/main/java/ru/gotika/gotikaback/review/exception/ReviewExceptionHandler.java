@@ -15,7 +15,7 @@ public class ReviewExceptionHandler {
 
     @ExceptionHandler(ReviewNotFoundException.class)
     public ResponseEntity<Map<String, String >> handle(ReviewNotFoundException e) {
-        log.error("Error occured: ",e);
+        log.error("Error occurred: ",e);
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Review not found");
         errorResponse.put("message", e.getMessage());
