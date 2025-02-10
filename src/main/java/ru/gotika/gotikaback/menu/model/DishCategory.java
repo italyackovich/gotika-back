@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Category {
+public class DishCategory {
     @Id
     @GeneratedValue
     private Long id;

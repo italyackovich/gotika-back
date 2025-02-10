@@ -3,35 +3,35 @@ package ru.gotika.gotikaback.menu.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.gotika.gotikaback.menu.dto.CategoryDto;
-import ru.gotika.gotikaback.menu.service.CategoryService;
+import ru.gotika.gotikaback.menu.dto.DishCategoryDto;
+import ru.gotika.gotikaback.menu.service.DishCategoryService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
-public class CategoryController {
+public class DishCategoryController {
 
-    private final CategoryService categoryService;
+    private final DishCategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> getCategories() {
+    public ResponseEntity<List<DishCategoryDto>> getCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDto> getCategory(@PathVariable Long id) {
+    public ResponseEntity<DishCategoryDto> getCategory(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<DishCategoryDto> createCategory(@RequestBody DishCategoryDto categoryDto) {
         return ResponseEntity.ok(categoryService.createCategory(categoryDto));
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<DishCategoryDto> updateCategory(@PathVariable Long id, @RequestBody DishCategoryDto categoryDto) {
         return ResponseEntity.ok(categoryService.updateCategory(id, categoryDto));
     }
 

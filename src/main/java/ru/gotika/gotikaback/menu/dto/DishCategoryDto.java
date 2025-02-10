@@ -3,7 +3,7 @@ package ru.gotika.gotikaback.menu.dto;
 import lombok.Data;
 
 @Data
-public class CategoryDto {
+public class DishCategoryDto {
 
     private Long id;
     private String name;
