@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gotika.gotikaback.restaurant.exception.RestaurantNotFoundException;
 import ru.gotika.gotikaback.restaurant.model.Restaurant;
 import ru.gotika.gotikaback.restaurant.repository.RestaurantRepository;
 import ru.gotika.gotikaback.review.dto.ReviewDto;
@@ -15,7 +16,6 @@ import ru.gotika.gotikaback.review.service.ReviewService;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,24 +54,19 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     public void updateAverageRating(Long restaurantId){
-        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
-        if (restaurantOptional.isPresent()) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant with id " + restaurantId + " not found"));
+        List<Review> reviews = restaurant.getReviewList();
 
-            Restaurant restaurant = restaurantOptional.get();
-            List<Review> reviews = restaurant.getReviewList();
+        float averageRating = (float) reviews.stream()
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0f);
 
-            float averageRating = (float) reviews.stream()
-                    .mapToInt(Review::getRating)
-                    .average()
-                    .orElse(0f);
-
-            averageRating = Math.max(1, Math.min(averageRating, 5));
-
-            restaurant.setRating(averageRating);
-            restaurantRepository.save(restaurant);
-            log.info("Review updated averageRating: {} for restaurant with id {}", averageRating, restaurantId);
-        }
-
+        averageRating = Math.max(1, Math.min(averageRating, 5));
+        restaurant.setRating(averageRating);
+        restaurantRepository.save(restaurant);
+        log.info("Review updated averageRating: {} for restaurant with id {}", averageRating, restaurantId);
     }
 
     @Transactional
