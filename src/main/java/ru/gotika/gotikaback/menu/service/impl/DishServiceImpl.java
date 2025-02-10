@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.common.service.CloudinaryService;
 import ru.gotika.gotikaback.menu.dto.DishChangeRequest;
 import ru.gotika.gotikaback.menu.dto.DishDto;
-import ru.gotika.gotikaback.menu.enums.DishCategory;
 import ru.gotika.gotikaback.menu.mapper.DishMapper;
 
 import ru.gotika.gotikaback.menu.model.Dish;
@@ -36,11 +35,6 @@ public class DishServiceImpl implements DishService {
     @Override
     public DishDto getDishByName(String name) {
         return dishMapper.dishToDishDto(dishRepository.findByName(name).orElse(null));
-    }
-
-    @Override
-    public List<DishDto> getDishByCategory(DishCategory category) {
-        return dishMapper.dishListToDishDtoList(dishRepository.findByCategory(category));
     }
 
     @Override
