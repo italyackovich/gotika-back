@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-dish-category
+      author: admin
+      changes:
+        - dropColumn:
+            tableName: dish
+            columnName: category

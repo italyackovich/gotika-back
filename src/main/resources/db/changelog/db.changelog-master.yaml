@@ -24,3 +24,6 @@ databaseChangeLog:
 
   - include:
       file: db/changelog/db.changelog-2025-01-13-change-rating-type-to-integer.yaml
+
+  - include:
+      file: db/changelog/db.changelog-2025-02-10-drop-dish-category.yaml

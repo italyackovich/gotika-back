@@ -1,11 +1,7 @@
 package ru.gotika.gotikaback.menu.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.gotika.gotikaback.menu.enums.DishCategory;
-import ru.gotika.gotikaback.order.model.OrderItem;
 
 @Entity
 @Data
@@ -24,10 +20,6 @@ public class Dish {
     private Double price;
 
     private String imageUrl;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private DishCategory category;
 
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false)

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "update-status-check"
+      id: update-status-check
       author: admin
       changes:
         - sql:
