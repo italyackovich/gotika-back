@@ -9,7 +9,8 @@ import ru.gotika.gotikaback.user.mapper.UserMapper;
 
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class, OrderMapper.class, MenuMapper.class})
+@Mapper(componentModel = "spring",
+        uses = {UserMapper.class, OrderMapper.class, MenuMapper.class})
 public interface RestaurantMapper {
     RestaurantDto restaurantToRestaurantDto(Restaurant restaurant);
 

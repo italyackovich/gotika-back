@@ -1,13 +1,13 @@
 package ru.gotika.gotikaback.menu.mapper;
 
 import org.mapstruct.*;
+import ru.gotika.gotikaback.common.util.MapperUtil;
 import ru.gotika.gotikaback.menu.dto.DishDto;
 import ru.gotika.gotikaback.menu.model.Dish;
-import ru.gotika.gotikaback.menu.model.Menu;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {MapperUtil.class})
 public interface DishMapper {
 
     List<DishDto> dishListToDishDtoList(List<Dish> dishList);
@@ -18,12 +18,4 @@ public interface DishMapper {
 
     @Mapping(target = "menuId", source = "menu.id")
     DishDto dishToDishDto(Dish dish);
-
-    @Named("idToMenu")
-    default Menu idToMenu(Long menuId) {
-        if (menuId == null) return null;
-        Menu menu = new Menu();
-        menu.setId(menuId);
-        return menu;
-    }
 }
