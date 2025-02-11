@@ -9,7 +9,7 @@ import ru.gotika.gotikaback.menu.service.DishCategoryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/categories")
+@RequestMapping("/api/v1/dish-categories")
 @RequiredArgsConstructor
 public class DishCategoryController {
 
