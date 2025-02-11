@@ -2,10 +2,10 @@ package ru.gotika.gotikaback.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.gotika.gotikaback.common.annotation.ValidPassword;
 import ru.gotika.gotikaback.common.annotation.ValidPhoneNumber;
 import ru.gotika.gotikaback.order.dto.OrderDto;
 import ru.gotika.gotikaback.review.dto.ReviewDto;
@@ -29,9 +29,10 @@ public class UserDto {
     private String email;
     private Long restaurantId;
     private String imageUrl;
-
-    @NotNull(message = "Role cannot be null")
     private Role role;
+
+    @ValidPassword
+    private String password;
 
     @ValidPhoneNumber
     private String phoneNumber;
