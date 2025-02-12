@@ -19,7 +19,7 @@ public class Menu {
     private String name;
 
     @OneToOne
-    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id", nullable = false)
     @JsonBackReference
     private Restaurant restaurant;
 

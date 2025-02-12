@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.menu.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,17 +27,17 @@ public class MenuController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<MenuDto> createMenu(@RequestBody MenuDto menuDto) {
+    public ResponseEntity<MenuDto> createMenu(@RequestBody @Valid MenuDto menuDto) {
         return ResponseEntity.ok(menuService.createMenu(menuDto));
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<MenuDto> updateMenu(@PathVariable Long id, @RequestBody MenuDto menuDto) {
+    public ResponseEntity<MenuDto> updateMenu(@PathVariable Long id, @RequestBody @Valid MenuDto menuDto) {
         return ResponseEntity.ok(menuService.updateMenu(id, menuDto));
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Void> deleteMenu(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMenu(@PathVariable @Valid Long id) {
         menuService.deleteMenuById(id);
         return ResponseEntity.noContent().build();
     }

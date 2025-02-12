@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.menu.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,18 +29,18 @@ public class DishController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<DishDto> createDish(@RequestBody DishDto dishDto) {
+    public ResponseEntity<DishDto> createDish(@RequestBody @Valid DishDto dishDto) {
         System.out.println(dishDto);
         return ResponseEntity.ok(dishService.createDish(dishDto));
     }
 
     @PatchMapping("/{id}/patch")
-    public ResponseEntity<DishDto> patchDish(@PathVariable Long id, @RequestBody DishChangeRequest dishChangeRequest) {
+    public ResponseEntity<DishDto> patchDish(@PathVariable Long id, @RequestBody @Valid DishChangeRequest dishChangeRequest) {
         return  ResponseEntity.ok(dishService.patchDish(id, dishChangeRequest));
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<DishDto> updateDish(@PathVariable Long id, @RequestBody DishDto dishDto) {
+    public ResponseEntity<DishDto> updateDish(@PathVariable Long id, @RequestBody @Valid DishDto dishDto) {
         return ResponseEntity.ok(dishService.updateDish(id, dishDto));
     }
 
