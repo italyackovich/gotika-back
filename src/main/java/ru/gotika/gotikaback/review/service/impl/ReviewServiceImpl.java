@@ -52,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewMapper.reviewToReviewDto(savedReview);
     }
 
-    public void updateAverageRating(Long restaurantId){
+    private void updateAverageRating(Long restaurantId){
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RestaurantNotFoundException("Restaurant with id " + restaurantId + " not found"));
         List<Review> reviews = restaurant.getReviewList();
