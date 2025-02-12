@@ -49,10 +49,9 @@ public class ReviewServiceImpl implements ReviewService {
 
         updateAverageRating(savedReview.getRestaurant().getId());
         log.info("Review created: {}", savedReview);
-        return reviewMapper.reviewToReviewDto(reviewRepository.save(review));
+        return reviewMapper.reviewToReviewDto(savedReview);
     }
 
-    @Transactional
     public void updateAverageRating(Long restaurantId){
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RestaurantNotFoundException("Restaurant with id " + restaurantId + " not found"));
@@ -82,9 +81,13 @@ public class ReviewServiceImpl implements ReviewService {
         }).orElseThrow(() -> new ReviewNotFoundException("Review with id " + id + " not found"));
     }
 
+    @Transactional
     @Override
     public void deleteReview(Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ReviewNotFoundException("Review with id " + id + " not found"));
         reviewRepository.deleteById(id);
+        updateAverageRating(review.getRestaurant().getId());
         log.info("Review with id {} deleted", id);
     }
 }
