@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User user = userRepository.save(userMapper.userDtoToUser(userDto));
-        log.info("Created user {}", user);
+        log.info("Create user {}", user);
         return userMapper.userToUserDto(user);
     }
 
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
             updatedUser.setId(user.getId());
             updatedUser.setPassword(user.getPassword());
             userRepository.save(updatedUser);
-            log.info("Updated user {}", updatedUser);
+            log.info("Update user {}", updatedUser);
             return userMapper.userToUserDto(updatedUser);
         }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).map(user -> {
             user.setAddress(changeAddress.getAddress());
             userRepository.save(user);
-            log.info("Changed user's address with id {} to {}", id, changeAddress);
+            log.info("Change user's address with id {} to {}", id, changeAddress);
             return userMapper.userToUserDto(user);
         }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).map(user -> {
             user.setRole(changeRoleDto.getRole());
             userRepository.save(user);
-            log.info("Changed user's role with id {} to {}", id, changeRoleDto);
+            log.info("Change user's role with id {} to {}", id, changeRoleDto);
             return userMapper.userToUserDto(user);
         }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).map(user -> {
             user.setImageUrl(cloudinaryService.uploadFile(image));
             userRepository.save(user);
-            log.info("Changed user's image with id {}", id);
+            log.info("Change user's image with id {}", id);
             return userMapper.userToUserDto(user);
         }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
@@ -98,14 +98,14 @@ public class UserServiceImpl implements UserService {
             user.setLastName(userCredentials.getLastName());
             user.setPhoneNumber(userCredentials.getPhoneNumber());
             userRepository.save(user);
-            log.info("Changed user's credentials with id {} to {}", id, userCredentials);
+            log.info("Change user's credentials with id {} to {}", id, userCredentials);
             return userMapper.userToUserDto(user);
         }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     @Override
     public void deleteUser(Long id) {
-        log.info("Deleted user with id {}", id);
+        log.info("Delete user with id {}", id);
         userRepository.deleteById(id);
     }
 }

@@ -35,8 +35,8 @@ public class DishController {
     }
 
     @PatchMapping("/{id}/patch")
-    public ResponseEntity<DishDto> patchDish(@PathVariable Long id, @RequestBody @Valid DishChangeRequest dishChangeRequest) {
-        return  ResponseEntity.ok(dishService.patchDish(id, dishChangeRequest));
+    public ResponseEntity<DishDto> changeDishData(@PathVariable Long id, @RequestBody @Valid DishChangeRequest dishChangeRequest) {
+        return  ResponseEntity.ok(dishService.changeDishData(id, dishChangeRequest));
     }
 
     @PutMapping("/{id}/update")

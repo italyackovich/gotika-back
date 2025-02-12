@@ -11,8 +11,7 @@ import java.util.List;
 public interface DishService {
     List<DishDto> getAllDishes();
     DishDto getDishById(long id);
-    DishDto getDishByName(String name);
-    DishDto patchDish(Long id, DishChangeRequest dishChangeRequest);
+    DishDto changeDishData(Long id, DishChangeRequest dishChangeRequest);
     DishDto createDish(DishDto dishDto);
     DishDto updateDish(Long id, DishDto dishDto);
     void deleteDish(Long id);
