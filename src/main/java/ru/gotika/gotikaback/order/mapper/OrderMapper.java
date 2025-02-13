@@ -21,7 +21,6 @@ public interface OrderMapper {
     OrderDto orderToOrderDto(Order order);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "orderDate", defaultExpression = "java(LocalDateTime.now())")
     @Mapping(target = "restaurant", source = "restaurantId", qualifiedByName = "idToRestaurant")
     @Mapping(target = "user", source = "userId", qualifiedByName = "idToUser")
     Order orderDtoToOrder(OrderDto orderDto);

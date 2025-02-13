@@ -36,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderMapper.orderDtoToOrder(orderDto);
         order.setTotalAmount(0.0);
         order.setStatus(OrderStatus.NOT_PAID);
+        order.setOrderDate(LocalDateTime.now());
         orderRepository.save(order);
         return orderMapper.orderToOrderDto(order);
     }

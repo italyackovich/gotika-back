@@ -46,7 +46,8 @@ public class OrderItemServiceImpl implements OrderItemService {
         assert dish.getPrice() != null;
         orderItem.setPrice(orderItem.getQuantity() * dish.getPrice());
         assert order != null;
-        order.setTotalAmount(order.getOrderItems().stream().mapToDouble(OrderItem::getPrice).sum() + orderItem.getPrice());
+        order.setTotalAmount(order.getOrderItems().stream()
+                .mapToDouble(OrderItem::getPrice).sum() + orderItem.getPrice());
         orderRepository.save(order);
         orderItemRepository.save(orderItem);
         return orderItemMapper.orderItemToOrderItemDto(orderItem);
