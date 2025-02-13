@@ -3,8 +3,8 @@ package ru.gotika.gotikaback.order.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.order.dto.OrderDto;
-import ru.gotika.gotikaback.order.dto.StatusDto;
-import ru.gotika.gotikaback.order.enums.Status;
+import ru.gotika.gotikaback.order.dto.OrderStatusDto;
+import ru.gotika.gotikaback.order.enums.OrderStatus;
 import ru.gotika.gotikaback.order.mapper.OrderMapper;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.order.model.OrderItem;
@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createOrder(OrderDto orderDto) {
         Order order = orderMapper.orderDtoToOrder(orderDto);
         order.setTotalAmount(0.0);
-        order.setStatus(Status.NOT_PAID);
+        order.setStatus(OrderStatus.NOT_PAID);
         orderRepository.save(order);
         return orderMapper.orderToOrderDto(order);
     }
@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto changeOrderStatus(Long id, StatusDto statusDto) {
+    public OrderDto changeOrderStatus(Long id, OrderStatusDto statusDto) {
         return orderRepository.findById(id).map(order -> {
             order.setStatus(statusDto.getStatus());
             orderRepository.save(order);
@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void changeOrderStatusByPaymentId(Long paymentId, Status status) {
+    public void changeOrderStatusByPaymentId(Long paymentId, OrderStatus status) {
         orderRepository.findByPaymentId(paymentId).ifPresent(order -> {
             order.setStatus(status);
             orderRepository.save(order);

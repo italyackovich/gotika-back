@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.gotika.gotikaback.order.dto.OrderDto;
-import ru.gotika.gotikaback.order.dto.StatusDto;
+import ru.gotika.gotikaback.order.dto.OrderStatusDto;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.order.service.OrderService;
 
@@ -63,7 +63,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}/change-status")
-    public ResponseEntity<OrderDto> changeStatus(@PathVariable Long id, @RequestBody StatusDto statusDto) {
+    public ResponseEntity<OrderDto> changeStatus(@PathVariable Long id, @RequestBody OrderStatusDto statusDto) {
         return ResponseEntity.ok(orderService.changeOrderStatus(id, statusDto));
     }
 

@@ -1,6 +1,6 @@
 package ru.gotika.gotikaback.order.enums;
 
-public enum Status {
+public enum OrderStatus {
     PAID,
     NOT_PAID,
     AWAITING,

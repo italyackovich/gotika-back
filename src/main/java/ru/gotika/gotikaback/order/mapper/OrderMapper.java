@@ -3,7 +3,6 @@ package ru.gotika.gotikaback.order.mapper;
 import org.mapstruct.*;
 import ru.gotika.gotikaback.common.util.MapperUtil;
 import ru.gotika.gotikaback.order.dto.OrderDto;
-import ru.gotika.gotikaback.order.enums.Status;
 import ru.gotika.gotikaback.order.model.Order;
 
 import java.time.LocalDateTime;
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
         uses = {MapperUtil.class},
-        imports = {Status.class, LocalDateTime.class, Collectors.class})
+        imports = {LocalDateTime.class, Collectors.class})
 public interface OrderMapper {
 
     List<OrderDto> orderListToOrderDtoList(List<Order> orderList);
