@@ -13,8 +13,10 @@ public class OrderItem {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     private Integer quantity;
 
+    @Column(nullable = false)
     private Double price;
 
     @ManyToOne
