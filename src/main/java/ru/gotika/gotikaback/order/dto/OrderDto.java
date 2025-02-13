@@ -1,12 +1,11 @@
 package ru.gotika.gotikaback.order.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gotika.gotikaback.order.enums.OrderStatus;
 import ru.gotika.gotikaback.payment.dto.PaymentDto;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -16,12 +15,17 @@ import java.util.List;
 public class OrderDto {
 
     private Long id;
-    private OrderStatus status;
+
+    @NotNull(message = "Total amount cannot be a null")
     private Double totalAmount;
-    private LocalDateTime orderDate;
+
     private LocalTime deliveryTime;
     private List<OrderItemDto> orderItems;
+
+    @NotNull(message = "User id cannot be a null")
     private Long userId;
+
+    @NotNull(message = "Restaurant id cannot be a null")
     private Long restaurantId;
     private PaymentDto payment;
 
