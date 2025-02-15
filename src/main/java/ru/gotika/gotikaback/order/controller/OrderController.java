@@ -35,16 +35,10 @@ public class OrderController {
     @GetMapping("/generate-report")
     public ResponseEntity<?> generateOrderReport(@RequestParam Long restaurantId) throws IOException {
         List<Order> orders = orderService.getOrdersForLastMonth(restaurantId);
-
         ByteArrayOutputStream outputStream = getByteArrayOutputStream(orders);
-
-        // Чтение файла в поток
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(outputStream.toByteArray()));
-
-        // Отправляем файл пользователю
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=orders_report.txt");
-
         return ResponseEntity.status(HttpStatus.OK)
                 .headers(headers)
                 .contentLength(outputStream.size())

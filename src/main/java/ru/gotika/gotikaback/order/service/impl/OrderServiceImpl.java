@@ -1,6 +1,7 @@
 package ru.gotika.gotikaback.order.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.order.dto.OrderDto;
 import ru.gotika.gotikaback.order.dto.OrderStatusDto;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -24,12 +26,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getAllOrders() {
+        log.info("Get all orders");
         return orderMapper.orderListToOrderDtoList(orderRepository.findAll());
     }
 
     @Override
     public OrderDto getOrderById(Long id) {
-        return orderMapper.orderToOrderDto(orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order with id " + id + " not found")));
+        log.info("Get order by id: {}", id);
+        return orderMapper.orderToOrderDto(orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order with id " + id + " not found")));
     }
 
     @Override
@@ -39,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.NOT_PAID);
         order.setOrderDate(LocalDateTime.now());
         orderRepository.save(order);
+        log.info("Order created: {}", order);
         return orderMapper.orderToOrderDto(order);
     }
 
@@ -52,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
                     .sum();
             newOrder.setTotalAmount(totalAmount);
             orderRepository.save(newOrder);
+            log.info("Order updated: {}", newOrder);
             return orderMapper.orderToOrderDto(newOrder);
         }).orElseThrow(() -> new OrderNotFoundException("Order with id " + id + " not found"));
     }
@@ -61,6 +68,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id).map(order -> {
             order.setStatus(statusDto.getStatus());
             orderRepository.save(order);
+            log.info("Order status changed: {}", order);
             return orderMapper.orderToOrderDto(order);
         }).orElseThrow(() -> new OrderNotFoundException("Order with id " + id + " not found"));
     }
@@ -70,12 +78,13 @@ public class OrderServiceImpl implements OrderService {
 
         LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
         LocalDateTime now = LocalDateTime.now();
-
+        log.info("Get orders for last month: {}", oneMonthAgo);
         return orderRepository.findByRestaurantIdAndOrderDateBetween(restaurantId, oneMonthAgo, now);
     }
 
     @Override
     public void deleteOrder(Long id) {
+        log.info("Delete order by id: {}", id);
         orderRepository.deleteById(id);
     }
 
@@ -84,6 +93,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.findByPaymentId(paymentId).ifPresent(order -> {
             order.setStatus(status);
             orderRepository.save(order);
+            log.info("Order status changed by webhook: {}", order);
         });
     }
 }

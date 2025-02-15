@@ -1,6 +1,7 @@
 package ru.gotika.gotikaback.order.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.menu.exception.DishNotFoundException;
 import ru.gotika.gotikaback.menu.model.Dish;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
@@ -28,11 +30,13 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public List<OrderItemDto> getAllOrderItems() {
+        log.info("Get all order items");
         return orderItemMapper.orderItemListToOrderItemDtoList(orderItemRepository.findAll());
     }
 
     @Override
     public OrderItemDto getOrderItemById(Long id) {
+        log.info("Get order item by id: {}", id);
         return orderItemMapper.orderItemToOrderItemDto(orderItemRepository.
                 findById(id).
                 orElseThrow(() -> new OrderItemNotFoundException("Order item with id: " + id + " not found"))
@@ -58,6 +62,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .mapToDouble(OrderItem::getPrice).sum() + orderItem.getPrice());
         orderRepository.save(order);
         orderItemRepository.save(orderItem);
+        log.info("Saved order item: {}", orderItem);
         return orderItemMapper.orderItemToOrderItemDto(orderItem);
     }
 
@@ -78,6 +83,7 @@ public class OrderItemServiceImpl implements OrderItemService {
             orderRepository.save(order);
 
             orderItemRepository.save(newOrderItem);
+            log.info("Updated order item: {}", newOrderItem);
             return orderItemMapper.orderItemToOrderItemDto(newOrderItem);
         }).orElseThrow(() -> new OrderItemNotFoundException("Order item with id: " + id + " not found"));
     }
@@ -97,6 +103,6 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .mapToDouble(OrderItem::getPrice).sum()
         );
         orderRepository.save(order);
-
+        log.info("Delete order item by id: {}", id);
     }
 }
