@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.order.dto.OrderDto;
 import ru.gotika.gotikaback.order.dto.OrderStatusDto;
 import ru.gotika.gotikaback.order.enums.OrderStatus;
+import ru.gotika.gotikaback.order.exception.OrderNotFoundException;
 import ru.gotika.gotikaback.order.mapper.OrderMapper;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.order.model.OrderItem;
@@ -28,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto getOrderById(Long id) {
-        return orderMapper.orderToOrderDto(orderRepository.findById(id).orElse(null));
+        return orderMapper.orderToOrderDto(orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order with id " + id + " not found")));
     }
 
     @Override
@@ -52,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
             newOrder.setTotalAmount(totalAmount);
             orderRepository.save(newOrder);
             return orderMapper.orderToOrderDto(newOrder);
-        }).orElse(null);
+        }).orElseThrow(() -> new OrderNotFoundException("Order with id " + id + " not found"));
     }
 
     @Override
@@ -61,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
             order.setStatus(statusDto.getStatus());
             orderRepository.save(order);
             return orderMapper.orderToOrderDto(order);
-        }).orElse(null);
+        }).orElseThrow(() -> new OrderNotFoundException("Order with id " + id + " not found"));
     }
 
     @Override

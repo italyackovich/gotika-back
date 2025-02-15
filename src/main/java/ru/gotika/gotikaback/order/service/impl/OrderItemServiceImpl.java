@@ -2,9 +2,12 @@ package ru.gotika.gotikaback.order.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.gotika.gotikaback.menu.exception.DishNotFoundException;
 import ru.gotika.gotikaback.menu.model.Dish;
 import ru.gotika.gotikaback.menu.repository.DishRepository;
 import ru.gotika.gotikaback.order.dto.OrderItemDto;
+import ru.gotika.gotikaback.order.exception.OrderItemNotFoundException;
+import ru.gotika.gotikaback.order.exception.OrderNotFoundException;
 import ru.gotika.gotikaback.order.mapper.OrderItemMapper;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.order.model.OrderItem;
@@ -32,20 +35,25 @@ public class OrderItemServiceImpl implements OrderItemService {
     public OrderItemDto getOrderItemById(Long id) {
         return orderItemMapper.orderItemToOrderItemDto(orderItemRepository.
                 findById(id).
-                orElse(null)
+                orElseThrow(() -> new OrderItemNotFoundException("Order item with id: " + id + " not found"))
         );
     }
 
     @Override
     public OrderItemDto saveOrderItem(OrderItemDto orderItemDto) {
         OrderItem orderItem = orderItemMapper.orderItemDtoToOrderItem(orderItemDto);
-        Order order = orderRepository.findById(orderItemDto.getOrderId()).orElse(null);
-        Dish dish = dishRepository.findById(orderItemDto.getDishId()).orElse(null);
+
+        Order order = orderRepository.findById(orderItemDto.getOrderId())
+                .orElseThrow(() -> new OrderNotFoundException("Order with id: " + orderItemDto.getOrderId() + " not found"));
+
+        Dish dish = dishRepository.findById(orderItemDto.getDishId())
+                .orElseThrow(() -> new DishNotFoundException("Dish with id: " + orderItemDto.getDishId() + " not found"));
+
         orderItem.setPrice(0.0);
-        assert dish != null;
+
         assert dish.getPrice() != null;
         orderItem.setPrice(orderItem.getQuantity() * dish.getPrice());
-        assert order != null;
+
         order.setTotalAmount(order.getOrderItems().stream()
                 .mapToDouble(OrderItem::getPrice).sum() + orderItem.getPrice());
         orderRepository.save(order);
@@ -58,34 +66,37 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemRepository.findById(id).map(orderItem -> {
             OrderItem newOrderItem = orderItemMapper.orderItemDtoToOrderItem(orderItemDto);
             newOrderItem.setId(orderItem.getId());
-            Order order = orderRepository.findById(orderItemDto.getOrderId()).orElse(null);
+            Order order = orderRepository.findById(orderItemDto.getOrderId())
+                    .orElseThrow(() -> new OrderNotFoundException("Order with id: " + id + " not found"));
             newOrderItem.setPrice(newOrderItem.getQuantity() * orderItem.getDish().getPrice());
-            if (order != null) {
-                order.setTotalAmount(order.getOrderItems()
-                        .stream()
-                        .mapToDouble(OrderItem::getPrice)
-                        .sum() + newOrderItem.getPrice()
-                );
-                orderRepository.save(order);
-            }
+
+            order.setTotalAmount(order.getOrderItems()
+                    .stream()
+                    .mapToDouble(OrderItem::getPrice)
+                    .sum() + newOrderItem.getPrice()
+            );
+            orderRepository.save(order);
+
             orderItemRepository.save(newOrderItem);
             return orderItemMapper.orderItemToOrderItemDto(newOrderItem);
-        }).orElse(null);
+        }).orElseThrow(() -> new OrderItemNotFoundException("Order item with id: " + id + " not found"));
     }
 
     @Override
     public void deleteOrderItemById(Long id) {
-        OrderItem orderitem = orderItemRepository.findById(id).orElse(null);
+        OrderItem orderItem = orderItemRepository.findById(id)
+                .orElseThrow(() -> new OrderItemNotFoundException("Order item with id: " + id + " not found"));
+
         orderItemRepository.deleteById(id);
 
-        if (orderitem != null) {
-            Order order = orderRepository.findById(orderitem.getOrder().getId()).orElse(null);
-            assert order != null;
-            order.setTotalAmount(order.getOrderItems()
-                    .stream()
-                    .mapToDouble(OrderItem::getPrice).sum()
-            );
-            orderRepository.save(order);
-        }
+        Order order = orderRepository.findById(orderItem.getOrder().getId())
+                .orElseThrow(() -> new OrderNotFoundException("Order with id: " + id + " not found"));
+
+        order.setTotalAmount(order.getOrderItems()
+                .stream()
+                .mapToDouble(OrderItem::getPrice).sum()
+        );
+        orderRepository.save(order);
+
     }
 }
