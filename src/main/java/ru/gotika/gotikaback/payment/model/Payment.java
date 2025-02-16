@@ -16,16 +16,21 @@ public class Payment {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
+    @Column(nullable = false)
     private LocalDateTime paymentDate;
 
+    @Column(nullable = false)
     private String yookassaPaymentId;
 
+    @Column(nullable = false)
     private String confirmationUrl;
 
     @OneToOne
