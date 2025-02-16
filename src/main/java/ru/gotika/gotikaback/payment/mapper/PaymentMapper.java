@@ -16,7 +16,7 @@ public interface PaymentMapper {
     List<PaymentDto> paymentListToPaymentDtoList(List<Payment> paymentList);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "paymentStatus", defaultExpression = "java(PaymentStatus.NOT_PAID)")
+    @Mapping(target = "paymentStatus", expression = "java(PaymentStatus.NOT_PAID)")
     @Mapping(target = "paymentDate", expression = "java(LocalDateTime.now())")
     @Mapping(target = "order", source = "orderId", qualifiedByName = "idToOrder")
     Payment paymentDtoToPayment(PaymentDto paymentDto);

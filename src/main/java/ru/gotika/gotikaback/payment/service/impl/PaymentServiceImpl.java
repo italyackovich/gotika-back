@@ -1,8 +1,7 @@
 package ru.gotika.gotikaback.payment.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.order.enums.OrderStatus;
 import ru.gotika.gotikaback.order.model.Order;
@@ -23,9 +22,8 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentServiceImpl implements PaymentService {
-
-    private final static Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     private final YookassaService yookassaService;
     private final PaymentRepository paymentRepository;
@@ -89,14 +87,14 @@ public class PaymentServiceImpl implements PaymentService {
             orderService.changeOrderStatusByPaymentId(paymentId, OrderStatus.PAID);
             changePaymentStatus(paymentId, PaymentStatus.PAID);
 
-            logger.info("Платеж успешно завершен: ID = {}, Сумма = {}", paymentId, amount);
+            log.info("Платеж успешно завершен: ID = {}, Сумма = {}", paymentId, amount);
 
         } else if ("payment.canceled".equals(notification.getEvent())) {
 
             orderService.changeOrderStatusByPaymentId(paymentId, OrderStatus.CANCELED);
             changePaymentStatus(paymentId, PaymentStatus.CANCELED);
 
-            logger.info("Платеж отменен: ID = {}", paymentId);
+            log.info("Платеж отменен: ID = {}", paymentId);
         }
     }
 
