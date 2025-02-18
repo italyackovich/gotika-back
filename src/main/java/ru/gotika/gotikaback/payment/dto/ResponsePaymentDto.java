@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentDto {
+public class ResponsePaymentDto {
 
     private Long id;
 

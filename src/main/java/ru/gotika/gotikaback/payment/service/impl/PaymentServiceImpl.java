@@ -8,7 +8,7 @@ import ru.gotika.gotikaback.order.exception.OrderNotFoundException;
 import ru.gotika.gotikaback.order.model.Order;
 import ru.gotika.gotikaback.order.repository.OrderRepository;
 import ru.gotika.gotikaback.order.service.OrderService;
-import ru.gotika.gotikaback.payment.dto.PaymentDto;
+import ru.gotika.gotikaback.payment.dto.RequestPaymentDto;
 import ru.gotika.gotikaback.payment.dto.PaymentNotificationDto;
 import ru.gotika.gotikaback.payment.enums.PaymentMethod;
 import ru.gotika.gotikaback.payment.enums.PaymentStatus;
@@ -34,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final OrderService orderService;
 
     @Override
-    public PaymentDto createPayment(PaymentDto paymentDto) {
+    public RequestPaymentDto createPayment(RequestPaymentDto paymentDto) {
         Order order = orderRepository.findById(paymentDto.getOrderId())
                 .orElseThrow(() -> new OrderNotFoundException("Order with id: " + paymentDto.getOrderId() + " not found"));
 
@@ -58,7 +58,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentDto confirmPayment(String yookassaPaymentId) {
+    public RequestPaymentDto confirmPayment(String yookassaPaymentId) {
 
         Map<String, Object> paymentStatus = yookassaService.getPaymentStatus(yookassaPaymentId);
         Payment payment = paymentRepository.findByYookassaPaymentId(yookassaPaymentId)
@@ -108,7 +108,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentDto getPayment(Long id) {
+    public RequestPaymentDto getPayment(Long id) {
         return paymentMapper.paymentToPaymentDto(paymentRepository.findById(id)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment with id: " + id + " not found")));
     }

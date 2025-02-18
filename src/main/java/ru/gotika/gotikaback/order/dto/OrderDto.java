@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gotika.gotikaback.payment.dto.PaymentDto;
+import ru.gotika.gotikaback.payment.dto.RequestPaymentDto;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -27,6 +27,6 @@ public class OrderDto {
 
     @NotNull(message = "Restaurant id cannot be a null")
     private Long restaurantId;
-    private PaymentDto payment;
+    private RequestPaymentDto payment;
 
 }

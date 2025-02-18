@@ -3,7 +3,7 @@ package ru.gotika.gotikaback.payment.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.gotika.gotikaback.payment.dto.PaymentDto;
+import ru.gotika.gotikaback.payment.dto.RequestPaymentDto;
 import ru.gotika.gotikaback.payment.dto.PaymentNotificationDto;
 import ru.gotika.gotikaback.payment.service.PaymentService;
 
@@ -15,17 +15,17 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaymentDto> getPaymentById(@PathVariable Long id) {
+    public ResponseEntity<RequestPaymentDto> getPaymentById(@PathVariable Long id) {
         return ResponseEntity.ok(paymentService.getPayment(id));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<PaymentDto> createPayment(@RequestBody PaymentDto payment) {
+    public ResponseEntity<RequestPaymentDto> createPayment(@RequestBody RequestPaymentDto payment) {
         return ResponseEntity.ok(paymentService.createPayment(payment));
     }
 
     @GetMapping("/confirmation")
-    public ResponseEntity<PaymentDto> confirmPayment(@RequestParam String paymentId) {
+    public ResponseEntity<RequestPaymentDto> confirmPayment(@RequestParam String paymentId) {
         return ResponseEntity.ok(paymentService.confirmPayment(paymentId));
     }
 
