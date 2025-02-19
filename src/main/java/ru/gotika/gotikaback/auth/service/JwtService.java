@@ -3,6 +3,7 @@ package ru.gotika.gotikaback.auth.service;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.gotika.gotikaback.auth.dto.AccessRefreshCookies;
+import ru.gotika.gotikaback.user.model.User;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -104,4 +105,12 @@ public interface JwtService {
      * @return {@code true} if the token is valid, {@code false} otherwise.
      */
     boolean isTokenValid(String token, UserDetails userDetails);
+
+    /**
+     * Revokes all valid refresh tokens associated with the specified {@link User},
+     * preventing any further use of those tokens.
+     *
+     * @param user the user whose refresh tokens should be revoked
+     */
+    void revokeAllUserTokens(User user);
 }

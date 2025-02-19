@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.auth.service.JwtService;
 import ru.gotika.gotikaback.auth.service.LogoutService;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
-import ru.gotika.gotikaback.auth.util.TokenUtil;
 import ru.gotika.gotikaback.user.exception.UserNotFoundException;
 import ru.gotika.gotikaback.user.model.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
@@ -21,9 +20,7 @@ import ru.gotika.gotikaback.user.repository.UserRepository;
 public class LogoutServiceImpl implements LogoutService {
 
     private final UserRepository userRepository;
-    private final CookieUtil cookieUtil;
     private final JwtService jwtService;
-    private final TokenUtil tokenUtil;
 
     @Override
     public void logout(
@@ -33,17 +30,17 @@ public class LogoutServiceImpl implements LogoutService {
     ) {
        final String token;
 
-       token = cookieUtil.getValueFromCookie(request, "accessTokenCookie");
+       token = CookieUtil.getValueFromCookie(request, "accessTokenCookie");
        String userEmail = jwtService.extractUsername(token);
        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> {
            log.error("User with email {} not found", userEmail);
            return new UserNotFoundException(userEmail);
        });
 
-       tokenUtil.revokeAllUserTokens(user);
+       jwtService.revokeAllUserTokens(user);
 
-       cookieUtil.deleteCookie("accessTokenCookie");
-       cookieUtil.deleteCookie("refreshTokenCookie");
+       CookieUtil.deleteCookie("accessTokenCookie");
+       CookieUtil.deleteCookie("refreshTokenCookie");
        SecurityContextHolder.clearContext();
 
        log.info("Logout of user with id {} is success", user.getId());

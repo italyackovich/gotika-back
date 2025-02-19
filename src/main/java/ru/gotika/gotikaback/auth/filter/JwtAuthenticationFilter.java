@@ -30,7 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final StringRedisTemplate stringRedisTemplate;
-    private final CookieUtil cookieUtil;
 
     @Override
     protected void doFilterInternal(
@@ -51,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
 
         try {
-            jwt = cookieUtil.getValueFromCookie(request, "accessTokenCookie");
+            jwt = CookieUtil.getValueFromCookie(request, "accessTokenCookie");
         } catch (MissingCookieException e) {
             log.warn("Cookie is missing");
             filterChain.doFilter(request, response);

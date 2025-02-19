@@ -2,13 +2,13 @@ package ru.gotika.gotikaback.auth.util;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.experimental.UtilityClass;
 import org.springframework.http.ResponseCookie;
-import org.springframework.stereotype.Component;
 import ru.gotika.gotikaback.auth.exception.MissingCookieException;
 
 import java.util.Arrays;
 
-@Component
+@UtilityClass
 public class CookieUtil {
 
     /**

@@ -16,7 +16,6 @@ import ru.gotika.gotikaback.auth.enums.TokenType;
 import ru.gotika.gotikaback.auth.exception.InvalidTokenException;
 import ru.gotika.gotikaback.auth.exception.TokenNotFoundException;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
-import ru.gotika.gotikaback.auth.util.TokenUtil;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.mapper.UserMapper;
 import ru.gotika.gotikaback.auth.model.Token;
@@ -42,9 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final AuthenticationManager authManager;
     private final PasswordEncoder passwordEncoder;
-    private final CookieUtil cookieUtil;
     private final StringRedisTemplate stringRedisTemplate;
-    private final TokenUtil tokenUtil;
 
     @Transactional
     @Override
@@ -84,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
 
         AccessRefreshCookies cookieList = jwtService.buildAccessRefreshTokenCookies(accessToken, refreshToken);
 
-        tokenUtil.revokeAllUserTokens(user);
+        jwtService.revokeAllUserTokens(user);
 
         stringRedisTemplate.opsForValue().set(user.getEmail(), accessToken, accessExpiration, TimeUnit.MILLISECONDS);
         saveUserToken(user, refreshToken);
@@ -110,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse refreshToken(HttpServletRequest request) {
 
-        String refreshToken = cookieUtil.getValueFromCookie(request, "refreshTokenCookie");
+        String refreshToken = CookieUtil.getValueFromCookie(request, "refreshTokenCookie");
 
         boolean isRefreshTokenValid = tokenRepository.findByToken(refreshToken)
                 .map(token -> !token.getIsRevoked())
@@ -143,7 +140,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String accessToken = jwtService.generateAccessToken(customUserDetails);
-        tokenUtil.revokeAllUserTokens(user);
+        jwtService.revokeAllUserTokens(user);
 
         stringRedisTemplate.opsForValue().set(user.getEmail(), accessToken, accessExpiration, TimeUnit.MILLISECONDS);
 

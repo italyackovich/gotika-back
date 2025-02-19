@@ -7,16 +7,22 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gotika.gotikaback.auth.dto.AccessRefreshCookies;
+import ru.gotika.gotikaback.auth.model.Token;
+import ru.gotika.gotikaback.auth.repository.TokenRepository;
 import ru.gotika.gotikaback.auth.service.JwtService;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
+import ru.gotika.gotikaback.user.model.User;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -32,7 +38,8 @@ public class JwtServiceImpl implements JwtService {
     @Value("${jwt.refreshToken.expiration}")
     private Long refreshExpiration;
 
-    private final CookieUtil cookieUtil;
+    private final StringRedisTemplate stringRedisTemplate;
+    private final TokenRepository tokenRepository;
 
     @Override
     public String extractUsername(String token) {
@@ -62,8 +69,8 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public AccessRefreshCookies buildAccessRefreshTokenCookies(String accessToken, String refreshToken) {
-        ResponseCookie accessTokenCookie = cookieUtil.createCookie("accessTokenCookie", accessToken, accessExpiration);
-        ResponseCookie refreshTokenCookie = cookieUtil.createCookie("refreshTokenCookie", refreshToken, refreshExpiration);
+        ResponseCookie accessTokenCookie = CookieUtil.createCookie("accessTokenCookie", accessToken, accessExpiration);
+        ResponseCookie refreshTokenCookie = CookieUtil.createCookie("refreshTokenCookie", refreshToken, refreshExpiration);
         return new AccessRefreshCookies(accessTokenCookie, refreshTokenCookie);
     }
 
@@ -110,5 +117,17 @@ public class JwtServiceImpl implements JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    @Transactional
+    public void revokeAllUserTokens(User user) {
+        stringRedisTemplate.delete(user.getEmail());
 
+        List<Token> validUserTokens = tokenRepository.findByUserIdAndIsRevokedFalse(user.getId());
+        if (validUserTokens.isEmpty()) {
+            return;
+        }
+        validUserTokens.forEach(token ->
+                token.setIsRevoked(true));
+        tokenRepository.saveAll(validUserTokens);
+        log.info("All user's tokens with id = {} is revoked", user.getId());
+    }
 }
