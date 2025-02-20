@@ -10,6 +10,7 @@ import ru.gotika.gotikaback.order.repository.OrderRepository;
 import ru.gotika.gotikaback.order.service.OrderService;
 import ru.gotika.gotikaback.payment.dto.RequestPaymentDto;
 import ru.gotika.gotikaback.payment.dto.PaymentNotificationDto;
+import ru.gotika.gotikaback.payment.dto.ResponsePaymentDto;
 import ru.gotika.gotikaback.payment.enums.PaymentMethod;
 import ru.gotika.gotikaback.payment.enums.PaymentStatus;
 import ru.gotika.gotikaback.payment.exception.PaymentNotFoundException;
@@ -34,14 +35,13 @@ public class PaymentServiceImpl implements PaymentService {
     private final OrderService orderService;
 
     @Override
-    public RequestPaymentDto createPayment(RequestPaymentDto paymentDto) {
+    public ResponsePaymentDto createPayment(RequestPaymentDto paymentDto) {
         Order order = orderRepository.findById(paymentDto.getOrderId())
                 .orElseThrow(() -> new OrderNotFoundException("Order with id: " + paymentDto.getOrderId() + " not found"));
 
         String idempotenceKey = UUID.randomUUID().toString();
 
-        // Создать платеж
-        Map<String, Object> paymentResponse = yookassaService.createPayment(
+        Map<String, Object> yookassaResponse = yookassaService.createPayment(
                 order.getTotalAmount(),
                 "Оплата заказа №" + paymentDto.getOrderId(),
                 "http://localhost:5173/",
@@ -49,16 +49,16 @@ public class PaymentServiceImpl implements PaymentService {
                 idempotenceKey
         );
 
-        Payment payment = paymentMapper.paymentDtoToPayment(paymentDto);
+        Payment payment = paymentMapper.requestPaymentDtoToPayment(paymentDto);
         payment.setPaymentMethod(PaymentMethod.NON_CASH);
-        payment.setYookassaPaymentId((String) paymentResponse.get("id"));
-        payment.setConfirmationUrl((String) ((Map) paymentResponse.get("confirmation")).get("confirmation_url"));
+        payment.setYookassaPaymentId((String) yookassaResponse.get("id"));
+        payment.setConfirmationUrl((String) ((Map) yookassaResponse.get("confirmation")).get("confirmation_url"));
         paymentRepository.save(payment);
-        return paymentMapper.paymentToPaymentDto(payment);
+        return paymentMapper.paymentToResponsePaymentDto(payment);
     }
 
     @Override
-    public RequestPaymentDto confirmPayment(String yookassaPaymentId) {
+    public ResponsePaymentDto confirmPayment(String yookassaPaymentId) {
 
         Map<String, Object> paymentStatus = yookassaService.getPaymentStatus(yookassaPaymentId);
         Payment payment = paymentRepository.findByYookassaPaymentId(yookassaPaymentId)
@@ -69,7 +69,7 @@ public class PaymentServiceImpl implements PaymentService {
             paymentRepository.save(payment);
         }
 
-        return paymentMapper.paymentToPaymentDto(payment);
+        return paymentMapper.paymentToResponsePaymentDto(payment);
     }
 
     @Override
@@ -108,8 +108,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public RequestPaymentDto getPayment(Long id) {
-        return paymentMapper.paymentToPaymentDto(paymentRepository.findById(id)
+    public ResponsePaymentDto getPayment(Long id) {
+        return paymentMapper.paymentToResponsePaymentDto(paymentRepository.findById(id)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment with id: " + id + " not found")));
     }
 }

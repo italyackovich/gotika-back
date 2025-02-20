@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.gotika.gotikaback.payment.dto.RequestPaymentDto;
 import ru.gotika.gotikaback.payment.dto.PaymentNotificationDto;
+import ru.gotika.gotikaback.payment.dto.ResponsePaymentDto;
 import ru.gotika.gotikaback.payment.service.PaymentService;
 
 @RestController
@@ -15,22 +16,22 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RequestPaymentDto> getPaymentById(@PathVariable Long id) {
+    public ResponseEntity<ResponsePaymentDto> getPaymentById(@PathVariable Long id) {
         return ResponseEntity.ok(paymentService.getPayment(id));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<RequestPaymentDto> createPayment(@RequestBody RequestPaymentDto payment) {
+    public ResponseEntity<ResponsePaymentDto> createPayment(@RequestBody RequestPaymentDto payment) {
         return ResponseEntity.ok(paymentService.createPayment(payment));
     }
 
     @GetMapping("/confirmation")
-    public ResponseEntity<RequestPaymentDto> confirmPayment(@RequestParam String paymentId) {
+    public ResponseEntity<ResponsePaymentDto> confirmPayment(@RequestParam String paymentId) {
         return ResponseEntity.ok(paymentService.confirmPayment(paymentId));
     }
 
     @PostMapping("/webhook-change-status")
-    public ResponseEntity<String> handleYooKassaWebhook(@RequestBody PaymentNotificationDto notification) {
+    public ResponseEntity<String> handleYookassaWebhook(@RequestBody PaymentNotificationDto notification) {
         paymentService.webhookYooKassa(notification);
         return ResponseEntity.ok("Webhook received");
     }

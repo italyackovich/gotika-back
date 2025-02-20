@@ -3,6 +3,7 @@ package ru.gotika.gotikaback.payment.mapper;
 import org.mapstruct.*;
 import ru.gotika.gotikaback.common.util.MapperUtil;
 import ru.gotika.gotikaback.payment.dto.RequestPaymentDto;
+import ru.gotika.gotikaback.payment.dto.ResponsePaymentDto;
 import ru.gotika.gotikaback.payment.enums.PaymentStatus;
 import ru.gotika.gotikaback.payment.model.Payment;
 
@@ -19,8 +20,8 @@ public interface PaymentMapper {
     @Mapping(target = "paymentStatus", expression = "java(PaymentStatus.NOT_PAID)")
     @Mapping(target = "paymentDate", expression = "java(LocalDateTime.now())")
     @Mapping(target = "order", source = "orderId", qualifiedByName = "idToOrder")
-    Payment paymentDtoToPayment(RequestPaymentDto paymentDto);
+    Payment requestPaymentDtoToPayment(RequestPaymentDto paymentDto);
 
     @Mapping(target = "orderId", source = "order.id")
-    RequestPaymentDto paymentToPaymentDto(Payment payment);
+    ResponsePaymentDto paymentToResponsePaymentDto(Payment payment);
 }
