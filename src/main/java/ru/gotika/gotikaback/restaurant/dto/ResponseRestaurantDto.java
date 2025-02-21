@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantDto {
+public class ResponseRestaurantDto {
 
     private Long id;
 
