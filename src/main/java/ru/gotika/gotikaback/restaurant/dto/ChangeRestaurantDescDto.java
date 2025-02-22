@@ -5,7 +5,7 @@ import lombok.Data;
 import ru.gotika.gotikaback.common.annotation.ValidPhoneNumber;
 
 @Data
-public class ChangeRestaurantCred {
+public class ChangeRestaurantDescDto {
 
     @NotNull(message = "Name cannot be null")
     private String name;
