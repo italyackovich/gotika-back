@@ -3,6 +3,7 @@ package ru.gotika.gotikaback.notification.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.gotika.gotikaback.notification.dto.NotificationDto;
+import ru.gotika.gotikaback.notification.exception.NotificationNotFoundException;
 import ru.gotika.gotikaback.notification.mapper.NotificationMapper;
 import ru.gotika.gotikaback.notification.model.Notification;
 import ru.gotika.gotikaback.notification.repository.NotificationRepository;
@@ -25,7 +26,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationDto getNotificationById(Long id) {
-        return notificationMapper.notificationToNotificationDto(notificationRepository.findById(id).orElse(null));
+        return notificationMapper.notificationToNotificationDto(notificationRepository.findById(id)
+                .orElseThrow(() -> new NotificationNotFoundException("Notification by id: " + id + " not found")));
     }
 
     @Override
@@ -41,7 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
             updatedNotification.setId(notification.getId());
             notificationRepository.save(updatedNotification);
             return notificationMapper.notificationToNotificationDto(updatedNotification);
-        }).orElseThrow(() -> new RuntimeException("Notification not found"));
+        }).orElseThrow(() -> new NotificationNotFoundException("Notification by id: " + id + " not found"));
     }
 
     @Override
