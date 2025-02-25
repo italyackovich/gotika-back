@@ -15,14 +15,17 @@ public class Notification {
 
     private String message;
 
+    @Column(nullable = false)
     private String title;
 
-    private Boolean isRead = false;
+    @Column(nullable = false)
+    private boolean isRead;
 
+    @Column(nullable = false)
     private LocalDate createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 }
