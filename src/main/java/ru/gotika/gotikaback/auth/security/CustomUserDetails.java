@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.auth.dto;
+package ru.gotika.gotikaback.auth.security;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.auth.config;
+package ru.gotika.gotikaback.auth.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

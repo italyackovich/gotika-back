@@ -15,6 +15,7 @@ import ru.gotika.gotikaback.auth.dto.*;
 import ru.gotika.gotikaback.auth.enums.TokenType;
 import ru.gotika.gotikaback.auth.exception.InvalidTokenException;
 import ru.gotika.gotikaback.auth.exception.TokenNotFoundException;
+import ru.gotika.gotikaback.auth.security.CustomUserDetails;
 import ru.gotika.gotikaback.auth.util.CookieUtil;
 import ru.gotika.gotikaback.user.dto.UserDto;
 import ru.gotika.gotikaback.user.mapper.UserMapper;

@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.auth.config;
+package ru.gotika.gotikaback.auth.security;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfigurationSource;
-import ru.gotika.gotikaback.auth.filter.JwtAuthenticationFilter;
 
 
 @Configuration

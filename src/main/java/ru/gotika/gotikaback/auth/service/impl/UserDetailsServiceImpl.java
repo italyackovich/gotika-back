@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.gotika.gotikaback.auth.dto.CustomUserDetails;
+import ru.gotika.gotikaback.auth.security.CustomUserDetails;
 import ru.gotika.gotikaback.user.model.User;
 import ru.gotika.gotikaback.user.repository.UserRepository;
 

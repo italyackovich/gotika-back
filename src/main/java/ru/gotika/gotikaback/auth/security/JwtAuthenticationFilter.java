@@ -1,4 +1,4 @@
-package ru.gotika.gotikaback.auth.filter;
+package ru.gotika.gotikaback.auth.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
