@@ -1,5 +1,6 @@
 package ru.gotika.gotikaback.user.controller;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -59,7 +60,7 @@ public class UserControllerTest {
         user2.setId(2L);
         user2.setFirstName("Jane");
 
-        Mockito.when(userService.getAllUsers()).thenReturn(List.of(user1, user2));
+        when(userService.getAllUsers()).thenReturn(List.of(user1, user2));
 
         mockMvc.perform(get("/api/v1/users"))
                 .andExpect(status().isOk())
@@ -77,7 +78,7 @@ public class UserControllerTest {
         userDto.setId(userId);
         userDto.setFirstName("John");
 
-        Mockito.when(userService.getUser(userId)).thenReturn(userDto);
+        when(userService.getUser(userId)).thenReturn(userDto);
 
         mockMvc.perform(get("/api/v1/users/{id}", userId))
                 .andExpect(status().isOk())
@@ -87,10 +88,10 @@ public class UserControllerTest {
     }
 
     @Test
-    void getUser_ShouldReturnUserDto_WhenUserDoesNotExist() throws Exception {
+    void getUser_ShouldThrowException_WhenUserDoesNotExist() throws Exception {
         Long userId = 999L;
 
-        Mockito.when(userService.getUser(userId))
+        when(userService.getUser(userId))
                 .thenThrow(new UserNotFoundException("User with id " + userId + " not found"));
 
         mockMvc.perform(get("/users/{id}", userId))
@@ -114,7 +115,7 @@ public class UserControllerTest {
         createdUser.setEmail("john.doe@example.com");
         createdUser.setPassword("password123");
 
-        Mockito.when(userService.createUser(Mockito.any(UserDto.class))).thenReturn(createdUser);
+        when(userService.createUser(Mockito.any(UserDto.class))).thenReturn(createdUser);
 
         mockMvc.perform(post("/api/v1/users/create")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,7 +145,7 @@ public class UserControllerTest {
         updatedUser.setLastName("UpdatedLast");
         updatedUser.setEmail("updated@example.com");
 
-        Mockito.when(userService.updateUser(Mockito.eq(userId), Mockito.any()))
+        when(userService.updateUser(Mockito.eq(userId), Mockito.any()))
                 .thenReturn(updatedUser);
 
         mockMvc.perform(put("/api/v1/users/{id}/update", userId)
@@ -171,7 +172,7 @@ public class UserControllerTest {
         updatedUser.setId(userId);
         updatedUser.setAddress("123 New Street");
 
-        Mockito.when(userService.changeAddress(Mockito.eq(userId), Mockito.any()))
+        when(userService.changeAddress(Mockito.eq(userId), Mockito.any()))
                 .thenReturn(updatedUser);
 
         mockMvc.perform(patch("/api/v1/users/{id}/ch-address", userId)
@@ -200,7 +201,7 @@ public class UserControllerTest {
         updatedUser.setLastName("NewLast");
         updatedUser.setPhoneNumber("+79243332999");
 
-        Mockito.when(userService.changeCred(Mockito.eq(userId), Mockito.any()))
+        when(userService.changeCred(Mockito.eq(userId), Mockito.any()))
                 .thenReturn(updatedUser);
 
         mockMvc.perform(patch("/api/v1/users/{id}/ch-cred", userId)
@@ -227,7 +228,7 @@ public class UserControllerTest {
         updatedUser.setId(userId);
         updatedUser.setRole(Role.ROLE_ADMIN);
 
-        Mockito.when(userService.changeRole(Mockito.eq(userId), Mockito.any()))
+        when(userService.changeRole(Mockito.eq(userId), Mockito.any()))
                 .thenReturn(updatedUser);
 
         mockMvc.perform(patch("/api/v1/users/{id}/ch-role", userId)
@@ -249,7 +250,7 @@ public class UserControllerTest {
         updatedUser.setId(userId);
         updatedUser.setImageUrl("http://cloudinary.com/newImage.jpg");
 
-        Mockito.when(userService.changeImage(Mockito.eq(userId), Mockito.any()))
+        when(userService.changeImage(Mockito.eq(userId), Mockito.any()))
                 .thenReturn(updatedUser);
 
         mockMvc.perform(multipart("/api/v1/users/{id}/ch-image", userId)
@@ -264,12 +265,12 @@ public class UserControllerTest {
     @Test
     void deleteUser_ShouldReturnNoContent() throws Exception {
         Long userId = 1L;
-        Mockito.doNothing().when(userService).deleteUser(userId);
+        doNothing().when(userService).deleteUser(userId);
 
         mockMvc.perform(delete("/api/v1/users/delete/{id}", userId))
                 .andExpect(status().isNoContent());
 
-        Mockito.verify(userService).deleteUser(userId);
+        verify(userService).deleteUser(userId);
     }
 
 }
