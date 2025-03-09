@@ -99,24 +99,30 @@ public class UserServiceImplTest {
 
         when(userMapper.userDtoToUser(inputDto)).thenReturn(userToSave);
 
-        User savedUser = new User();
-        savedUser.setId(100L);
-        savedUser.setPassword("encodedPassword");
-        when(userRepository.save(userToSave)).thenReturn(savedUser);
+        when(userRepository.save(userToSave)).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setPassword("encodedPassword");
+            user.setId(100L);
+            return user;
+        });
 
-        UserDto outputDto = new UserDto();
-        outputDto.setId(100L);
-        outputDto.setPassword("encodedPassword");
-        when(userMapper.userToUserDto(savedUser)).thenReturn(outputDto);
+        when(userMapper.userToUserDto(any(User.class))).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            UserDto userDto = new UserDto();
+            userDto.setPassword(user.getPassword());
+            userDto.setId(user.getId());
+            return userDto;
+        });
 
         UserDto result = userServiceImpl.createUser(inputDto);
 
         assertEquals(100L, result.getId());
         assertEquals("encodedPassword", result.getPassword());
+
         verify(passwordEncoder).encode("rawPassword");
         verify(userMapper).userDtoToUser(inputDto);
         verify(userRepository).save(userToSave);
-        verify(userMapper).userToUserDto(savedUser);
+        verify(userMapper).userToUserDto(userToSave);
     }
 
     @Test
@@ -124,34 +130,48 @@ public class UserServiceImplTest {
         Long userId = 1L;
         UserDto updateDto = new UserDto();
         updateDto.setPassword("newRawPassword");
+        updateDto.setFirstName("newFirstName");
+        updateDto.setLastName("newLastName");
 
         User existingUser = new User();
         existingUser.setId(userId);
-        existingUser.setPassword("oldEncodedPassword");
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
 
         User updatedUser = new User();
-        updatedUser.setId(userId);
-        updatedUser.setPassword("oldEncodedPassword");
+        updatedUser.setFirstName("newFirstName");
+        updatedUser.setLastName("newLastName");
+        updatedUser.setPassword("newRawPassword");
         when(userMapper.userDtoToUser(updateDto)).thenReturn(updatedUser);
 
-        User savedUser = new User();
-        savedUser.setId(userId);
-        savedUser.setPassword("oldEncodedPassword");
-        when(userRepository.save(updatedUser)).thenReturn(savedUser);
+        when(passwordEncoder.encode("newRawPassword")).thenReturn("newEncodedPassword");
 
-        UserDto savedDto = new UserDto();
-        savedDto.setId(userId);
-        when(userMapper.userToUserDto(savedUser)).thenReturn(savedDto);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setId(existingUser.getId());
+            return user;
+        });
+
+        when(userMapper.userToUserDto(any(User.class))).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setFirstName(user.getFirstName());
+            userDto.setLastName(user.getLastName());
+            return userDto;
+        });
 
         UserDto result = userServiceImpl.updateUser(userId, updateDto);
 
         assertEquals(userId, result.getId());
+        assertEquals("newFirstName", result.getFirstName());
+        assertEquals("newLastName", result.getLastName());
+
         verify(userRepository).findById(userId);
         verify(userMapper).userDtoToUser(updateDto);
         verify(userRepository).save(updatedUser);
-        verify(userMapper).userToUserDto(savedUser);
+        verify(userMapper).userToUserDto(updatedUser);
+        verify(passwordEncoder).encode("newRawPassword");
     }
 
     @Test
@@ -170,31 +190,37 @@ public class UserServiceImplTest {
     @Test
     void changeAddress_ShouldUpdateUserAddress_IfUserExisting() {
         Long userId = 1L;
-        User user = new User();
-        user.setId(userId);
+        User existingUser = new User();
+        existingUser.setId(userId);
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
 
         ChangeAddress changeAddress = new ChangeAddress();
         changeAddress.setAddress("newAddress");
-        user.setAddress(changeAddress.getAddress());
+        existingUser.setAddress(changeAddress.getAddress());
 
-        User savedUser = new User();
-        savedUser.setId(userId);
-        savedUser.setAddress("newAddress");
-        when(userRepository.save(user)).thenReturn(savedUser);
+        when(userRepository.save(existingUser)).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setId(existingUser.getId());
+            return user;
+        });
 
-        UserDto savedDto = new UserDto();
-        savedDto.setId(userId);
-        savedDto.setAddress("newAddress");
-        when(userMapper.userToUserDto(savedUser)).thenReturn(savedDto);
+        when(userMapper.userToUserDto(any(User.class))).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setAddress(user.getAddress());
+            return userDto;
+        });
 
         UserDto result = userServiceImpl.changeAddress(userId, changeAddress);
 
         assertEquals(userId, result.getId());
+        assertEquals("newAddress", result.getAddress());
+
         verify(userRepository).findById(userId);
-        verify(userRepository).save(user);
-        verify(userMapper).userToUserDto(savedUser);
+        verify(userRepository).save(existingUser);
+        verify(userMapper).userToUserDto(existingUser);
     }
 
     @Test
@@ -213,21 +239,21 @@ public class UserServiceImplTest {
     @Test
     void changeRole_ShouldUpdateUserRole_IfUserExisting() {
         Long userId = 1L;
-        User user = new User();
-        user.setId(userId);
-        user.setRole(Role.ROLE_CLIENT);
+        User existingUser = new User();
+        existingUser.setId(userId);
+        existingUser.setRole(Role.ROLE_CLIENT);
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
 
         ChangeRoleDto changeRoleDto = new ChangeRoleDto();
         changeRoleDto.setRole(Role.ROLE_ADMIN);
-        user.setRole(changeRoleDto.getRole());
+        existingUser.setRole(changeRoleDto.getRole());
 
         User savedUser = new User();
         savedUser.setId(userId);
         savedUser.setRole(Role.ROLE_ADMIN);
 
-        when(userRepository.save(user)).thenReturn(savedUser);
+        when(userRepository.save(existingUser)).thenReturn(savedUser);
 
         UserDto savedDto = new UserDto();
         savedDto.setId(userId);
@@ -239,7 +265,7 @@ public class UserServiceImplTest {
 
         assertEquals(userId, result.getId());
         verify(userRepository).findById(userId);
-        verify(userRepository).save(user);
+        verify(userRepository).save(existingUser);
         verify(userMapper).userToUserDto(savedUser);
     }
 
