@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).map(user -> {
             User updatedUser = userMapper.userDtoToUser(userDto);
             updatedUser.setId(user.getId());
-            updatedUser.setPassword(user.getPassword());
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
             userRepository.save(updatedUser);
             log.info("Update user {}", updatedUser);
             return userMapper.userToUserDto(updatedUser);
