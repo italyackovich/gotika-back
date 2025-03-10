@@ -249,24 +249,27 @@ public class UserServiceImplTest {
         changeRoleDto.setRole(Role.ROLE_ADMIN);
         existingUser.setRole(changeRoleDto.getRole());
 
-        User savedUser = new User();
-        savedUser.setId(userId);
-        savedUser.setRole(Role.ROLE_ADMIN);
+        when(userRepository.save(existingUser)).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setId(existingUser.getId());
+            user.setRole(Role.ROLE_ADMIN);
+            return user;
+        });
 
-        when(userRepository.save(existingUser)).thenReturn(savedUser);
-
-        UserDto savedDto = new UserDto();
-        savedDto.setId(userId);
-        savedDto.setRole(Role.ROLE_ADMIN);
-
-        when(userMapper.userToUserDto(savedUser)).thenReturn(savedDto);
+        when(userMapper.userToUserDto(any(User.class))).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setRole(user.getRole());
+            return userDto;
+        });
 
         UserDto result = userServiceImpl.changeRole(userId, changeRoleDto);
 
         assertEquals(userId, result.getId());
         verify(userRepository).findById(userId);
         verify(userRepository).save(existingUser);
-        verify(userMapper).userToUserDto(savedUser);
+        verify(userMapper).userToUserDto(existingUser);
     }
 
     @Test
@@ -287,29 +290,38 @@ public class UserServiceImplTest {
         Long userId = 1L;
         MultipartFile image = mock(MultipartFile.class);
 
-        User user = new User();
-        user.setId(userId);
-        user.setImageUrl("oldImageUrl");
+        User existingUser = new User();
+        existingUser.setId(userId);
+        existingUser.setImageUrl("oldImageUrl");
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
 
         String newImageUrl = "newImageUrl";
 
         when(cloudinaryService.uploadFile(image)).thenReturn(newImageUrl);
-        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.save(existingUser)).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setId(existingUser.getId());
+            user.setImageUrl(newImageUrl);
+            return user;
+        });
 
-        UserDto expectedDto = new UserDto();
-        expectedDto.setId(userId);
-
-        when(userMapper.userToUserDto(user)).thenReturn(expectedDto);
+        when(userMapper.userToUserDto(existingUser)).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setImageUrl(user.getImageUrl());
+            return userDto;
+        });
 
         UserDto result = userServiceImpl.changeImage(userId, image);
 
-        assertEquals(expectedDto, result);
+        assertEquals("newImageUrl", result.getImageUrl());
+
         verify(userRepository).findById(userId);
         verify(cloudinaryService).uploadFile(image);
-        verify(userRepository).save(user);
-        verify(userMapper).userToUserDto(user);
+        verify(userRepository).save(existingUser);
+        verify(userMapper).userToUserDto(existingUser);
     }
 
     @Test
@@ -329,40 +341,45 @@ public class UserServiceImplTest {
     @Test
     void changeCred_ShouldUpdateUserCred_IfUserExisting() {
         Long userId = 1L;
-        User user = new User();
-        user.setId(userId);
+        User existingUser = new User();
+        existingUser.setId(userId);
+        existingUser.setFirstName("oldFirstName");
+        existingUser.setPhoneNumber("oldPhoneNumber");
+        existingUser.setLastName("oldLastName");
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
 
         ChangeUserCredentials changeUserCredentials = new ChangeUserCredentials();
         changeUserCredentials.setFirstName("newFirstName");
         changeUserCredentials.setPhoneNumber("newPhoneNumber");
         changeUserCredentials.setLastName("newLastName");
-        user.setFirstName(changeUserCredentials.getFirstName());
-        user.setPhoneNumber(changeUserCredentials.getPhoneNumber());
-        user.setLastName(changeUserCredentials.getLastName());
 
-        User savedUser = new User();
-        savedUser.setId(userId);
-        savedUser.setFirstName("newFirstName");
-        savedUser.setPhoneNumber("newPhoneNumber");
-        savedUser.setLastName("newLastName");
+        when(userRepository.save(existingUser)).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setId(existingUser.getId());
+            user.setFirstName(changeUserCredentials.getFirstName());
+            user.setPhoneNumber(changeUserCredentials.getPhoneNumber());
+            user.setLastName(changeUserCredentials.getLastName());
+            return user;
+        });
 
-        when(userRepository.save(user)).thenReturn(savedUser);
-
-        UserDto userDto = new UserDto();
-        userDto.setId(userId);
-        userDto.setFirstName("newFirstName");
-        userDto.setPhoneNumber("newPhoneNumber");
-        userDto.setLastName("newLastName");
-        when(userMapper.userToUserDto(savedUser)).thenReturn(userDto);
+        when(userMapper.userToUserDto(existingUser)).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setFirstName(user.getFirstName());
+            userDto.setPhoneNumber(user.getPhoneNumber());
+            userDto.setLastName(user.getLastName());
+            return userDto;
+        });
 
         UserDto result = userServiceImpl.changeCred(userId, changeUserCredentials);
 
         assertEquals(userId, result.getId());
         verify(userRepository).findById(userId);
-        verify(userRepository).save(user);
-        verify(userMapper).userToUserDto(savedUser);
+        verify(userRepository).save(existingUser);
+        verify(userMapper).userToUserDto(existingUser);
     }
 
     @Test
