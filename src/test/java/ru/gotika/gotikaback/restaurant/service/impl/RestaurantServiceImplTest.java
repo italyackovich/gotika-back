@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.gotika.gotikaback.common.service.CloudinaryService;
+import ru.gotika.gotikaback.restaurant.dto.RequestRestaurantDto;
 import ru.gotika.gotikaback.restaurant.dto.ResponseRestaurantDto;
 import ru.gotika.gotikaback.restaurant.exception.RestaurantNotFoundException;
 import ru.gotika.gotikaback.restaurant.mapper.RestaurantMapper;
@@ -100,5 +101,39 @@ public class RestaurantServiceImplTest {
 
         verify(restaurantRepository).findById(restaurantId);
         verifyNoMoreInteractions(cloudinaryService, restaurantMapper);
+    }
+
+    @Test
+    void createRestaurant_ShouldReturnResponseRestaurantDto() {
+        RequestRestaurantDto requestRestaurantDto = new RequestRestaurantDto();
+        requestRestaurantDto.setName("newRestaurant");
+
+        Restaurant restaurant1 = new Restaurant();
+        restaurant1.setId(1L);
+        restaurant1.setName("newRestaurant");
+        when(restaurantMapper.requestRestaurantDtoToRestaurant(requestRestaurantDto)).thenReturn(restaurant1);
+
+        when(restaurantRepository.save(restaurant1)).thenAnswer(invocation -> {
+            Restaurant restaurant = invocation.getArgument(0);
+            restaurant.setId(1L);
+            return restaurant;
+        });
+
+        when(restaurantMapper.restaurantToResponseRestaurantDto(restaurant1)).thenAnswer(invocation -> {
+            Restaurant restaurant = invocation.getArgument(0);
+            ResponseRestaurantDto responseRestaurantDto = new ResponseRestaurantDto();
+            responseRestaurantDto.setId(restaurant.getId());
+            responseRestaurantDto.setName(restaurant.getName());
+            return responseRestaurantDto;
+        });
+
+        ResponseRestaurantDto result = restaurantService.createRestaurant(requestRestaurantDto);
+
+        assertEquals("newRestaurant", result.getName());
+        verify(restaurantMapper).requestRestaurantDtoToRestaurant(requestRestaurantDto);
+        verify(restaurantRepository).save(restaurant1);
+        verify(restaurantMapper).restaurantToResponseRestaurantDto(restaurant1);
+        verifyNoInteractions(cloudinaryService);
+
     }
 }
