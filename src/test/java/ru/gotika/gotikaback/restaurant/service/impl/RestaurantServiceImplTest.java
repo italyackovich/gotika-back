@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.gotika.gotikaback.common.service.CloudinaryService;
+import ru.gotika.gotikaback.restaurant.dto.ChangeRestaurantDescDto;
 import ru.gotika.gotikaback.restaurant.dto.RequestRestaurantDto;
 import ru.gotika.gotikaback.restaurant.dto.ResponseRestaurantDto;
 import ru.gotika.gotikaback.restaurant.exception.RestaurantNotFoundException;
@@ -134,6 +135,67 @@ public class RestaurantServiceImplTest {
         verify(restaurantRepository).save(restaurant1);
         verify(restaurantMapper).restaurantToResponseRestaurantDto(restaurant1);
         verifyNoInteractions(cloudinaryService);
+    }
 
+    @Test
+    void changeDesc_ShouldReturnResponseRestaurantDto_WhenRestaurantExists() {
+        Long restaurantId = 1L;
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(1L);
+        restaurant.setName("oldRestaurant");
+        restaurant.setPhoneNumber("oldPhoneNumber");
+        restaurant.setAddress("oldAddress");
+        restaurant.setOpeningHours("oldOpeningHours");
+        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(restaurant));
+
+        ChangeRestaurantDescDto changeRestaurantDescDto = new ChangeRestaurantDescDto();
+        changeRestaurantDescDto.setAddress("newAddress");
+        changeRestaurantDescDto.setName("newName");
+        changeRestaurantDescDto.setPhoneNumber("newPhoneNumber");
+        changeRestaurantDescDto.setOpeningHours("newOpeningHours");
+
+        when(restaurantRepository.save(restaurant)).thenAnswer(invocation -> {
+            Restaurant restaurant1 = invocation.getArgument(0);
+            restaurant1.setId(1L);
+            restaurant1.setName("newRestaurant");
+            restaurant1.setPhoneNumber("newPhoneNumber");
+            restaurant1.setAddress("newAddress");
+            restaurant1.setOpeningHours("newOpeningHours");
+            return restaurant1;
+        });
+
+        when(restaurantMapper.restaurantToResponseRestaurantDto(restaurant)).thenAnswer(invocation -> {
+            Restaurant restaurant1 = invocation.getArgument(0);
+            ResponseRestaurantDto responseRestaurantDto = new ResponseRestaurantDto();
+            responseRestaurantDto.setId(restaurant1.getId());
+            responseRestaurantDto.setName(restaurant1.getName());
+            responseRestaurantDto.setPhoneNumber(restaurant1.getPhoneNumber());
+            responseRestaurantDto.setAddress(restaurant1.getAddress());
+            responseRestaurantDto.setOpeningHours(restaurant1.getOpeningHours());
+            return responseRestaurantDto;
+        });
+
+        ResponseRestaurantDto result = restaurantService.changeDesc(restaurantId, changeRestaurantDescDto);
+
+        assertEquals("newRestaurant", result.getName());
+        assertEquals("newPhoneNumber", result.getPhoneNumber());
+        assertEquals("newAddress", result.getAddress());
+        assertEquals("newOpeningHours", result.getOpeningHours());
+
+        verify(restaurantRepository).findById(restaurantId);
+        verify(restaurantRepository).save(restaurant);
+        verify(restaurantMapper).restaurantToResponseRestaurantDto(restaurant);
+        verifyNoInteractions(cloudinaryService);
+    }
+
+    @Test
+    void changeDesc_ShouldThrowRestaurantNotFoundException_WhenRestaurantDoesNotExist() {
+        Long restaurantId = 999L;
+        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.empty());
+
+        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.changeDesc(restaurantId, new ChangeRestaurantDescDto()));
+        verify(restaurantRepository).findById(restaurantId);
+        verifyNoMoreInteractions(restaurantMapper, cloudinaryService);
     }
 }
