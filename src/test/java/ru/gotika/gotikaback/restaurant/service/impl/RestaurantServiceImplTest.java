@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 import ru.gotika.gotikaback.common.service.CloudinaryService;
 import ru.gotika.gotikaback.restaurant.dto.ChangeRestaurantDescDto;
 import ru.gotika.gotikaback.restaurant.dto.RequestRestaurantDto;
@@ -197,5 +198,116 @@ public class RestaurantServiceImplTest {
         assertThrows(RestaurantNotFoundException.class, () -> restaurantService.changeDesc(restaurantId, new ChangeRestaurantDescDto()));
         verify(restaurantRepository).findById(restaurantId);
         verifyNoMoreInteractions(restaurantMapper, cloudinaryService);
+    }
+
+    @Test
+    void updateRestaurant_ShouldReturnResponseRestaurantDto_WhenRestaurantExists() {
+        Long restaurantId = 1L;
+        Restaurant savedRestaurant = new Restaurant();
+        savedRestaurant.setId(1L);
+        savedRestaurant.setName("oldRestaurant");
+
+        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(savedRestaurant));
+
+        RequestRestaurantDto requestRestaurantDto = new RequestRestaurantDto();
+        requestRestaurantDto.setId(restaurantId);
+        requestRestaurantDto.setName("newRestaurant");
+
+        Restaurant updatedRestaurant = new Restaurant();
+        updatedRestaurant.setName("newRestaurant");
+        when(restaurantMapper.requestRestaurantDtoToRestaurant(requestRestaurantDto)).thenReturn(updatedRestaurant);
+
+        when(restaurantRepository.save(updatedRestaurant)).thenAnswer(invocation -> {
+            Restaurant restaurant1 = invocation.getArgument(0);
+            restaurant1.setId(restaurantId);
+            return restaurant1;
+        });
+
+        when(restaurantMapper.restaurantToResponseRestaurantDto(updatedRestaurant)).thenAnswer(invocation -> {
+            Restaurant restaurant1 = invocation.getArgument(0);
+            ResponseRestaurantDto responseRestaurantDto = new ResponseRestaurantDto();
+            responseRestaurantDto.setId(restaurant1.getId());
+            responseRestaurantDto.setName(restaurant1.getName());
+            return responseRestaurantDto;
+        });
+
+        ResponseRestaurantDto result = restaurantService.updateRestaurant(restaurantId, requestRestaurantDto);
+        assertEquals(restaurantId, result.getId());
+        assertEquals("newRestaurant", result.getName());
+        verify(restaurantRepository).findById(restaurantId);
+        verify(restaurantMapper).requestRestaurantDtoToRestaurant(requestRestaurantDto);
+        verify(restaurantRepository).save(updatedRestaurant);
+        verify(restaurantMapper).restaurantToResponseRestaurantDto(updatedRestaurant);
+        verifyNoInteractions(cloudinaryService);
+    }
+
+    @Test
+    void updateRestaurant_ShouldThrowRestaurantNotFoundException_WhenRestaurantDoesNotExist() {
+        Long restaurantId = 999L;
+
+        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.empty());
+
+        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.updateRestaurant(restaurantId, new RequestRestaurantDto()));
+
+        verify(restaurantRepository).findById(restaurantId);
+        verifyNoMoreInteractions(restaurantMapper, cloudinaryService);
+    }
+
+    @Test
+    void changeImage_ShouldReturnResponseRestaurantDto_WhenRestaurantExists() {
+        Long restaurantId = 1L;
+        Restaurant savedRestaurant = new Restaurant();
+        savedRestaurant.setId(restaurantId);
+        savedRestaurant.setImageUrl("oldImageUrl");
+
+        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.of(savedRestaurant));
+
+        MultipartFile file = mock(MultipartFile.class);
+        String newImageUrl = "newImageUrl";
+
+        when(cloudinaryService.uploadFile(file)).thenReturn(newImageUrl);
+
+        savedRestaurant.setImageUrl(newImageUrl);
+
+        when(restaurantRepository.save(savedRestaurant)).thenReturn(savedRestaurant);
+
+        when(restaurantMapper.restaurantToResponseRestaurantDto(savedRestaurant)).thenAnswer(invocation -> {
+            Restaurant restaurant1 = invocation.getArgument(0);
+            ResponseRestaurantDto responseRestaurantDto = new ResponseRestaurantDto();
+            responseRestaurantDto.setId(restaurant1.getId());
+            responseRestaurantDto.setImageUrl(restaurant1.getImageUrl());
+            return responseRestaurantDto;
+        });
+
+        ResponseRestaurantDto result = restaurantService.changeImage(restaurantId, file);
+
+        assertEquals(restaurantId, result.getId());
+        assertEquals("newImageUrl", result.getImageUrl());
+
+        verify(restaurantRepository).findById(restaurantId);
+        verify(cloudinaryService).uploadFile(file);
+        verify(restaurantRepository).save(savedRestaurant);
+        verify(restaurantMapper).restaurantToResponseRestaurantDto(savedRestaurant);
+    }
+
+    @Test
+    void changeImage_ShouldThrowRestaurantNotFoundException_WhenRestaurantDoesNotExist() {
+        Long restaurantId = 999L;
+
+        when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.empty());
+
+        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.changeImage(restaurantId, mock(MultipartFile.class)));
+
+        verify(restaurantRepository).findById(restaurantId);
+        verifyNoMoreInteractions(restaurantMapper, cloudinaryService);
+    }
+
+    @Test
+    void deleteRestaurant_ShouldDeleteRestaurantById() {
+        Long restaurantId = 1L;
+
+        restaurantService.deleteRestaurant(restaurantId);
+
+        verify(restaurantRepository).deleteById(restaurantId);
     }
 }
