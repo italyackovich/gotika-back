@@ -44,7 +44,7 @@ public class AuthController {
                     )
             }
     )
-    @PostMapping("/register")
+    @PostMapping("/accounts")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest request) {
         AuthResponse authResponse = authService.register(request);
         AccessRefreshCookies cookieList = authResponse.getCookieList();
@@ -73,7 +73,7 @@ public class AuthController {
                     )
             }
     )
-    @PostMapping("/login")
+    @PostMapping("/sessions")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         AuthResponse authResponse = authService.login(request);
         AccessRefreshCookies cookieList = authResponse.getCookieList();
@@ -102,7 +102,7 @@ public class AuthController {
                     )
             }
     )
-    @PostMapping("/refresh")
+    @PostMapping("/tokens")
     public ResponseEntity<?> refresh(HttpServletRequest request) {
         AuthResponse authResponse = authService.refreshToken(request);
         AccessRefreshCookies cookieList = authResponse.getCookieList();

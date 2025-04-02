@@ -9,7 +9,7 @@ import ru.gotika.gotikaback.order.service.OrderItemService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/orderItems")
+@RequestMapping("/api/v1/order-items")
 @RequiredArgsConstructor
 public class OrderItemController {
 
@@ -25,17 +25,17 @@ public class OrderItemController {
         return ResponseEntity.ok(orderItemService.getOrderItemById(id));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<OrderItemDto> create(@RequestBody OrderItemDto orderItemDto) {
         return ResponseEntity.ok(orderItemService.saveOrderItem(orderItemDto));
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<OrderItemDto> update(@PathVariable Long id, @RequestBody OrderItemDto orderItemDto) {
         return ResponseEntity.ok(orderItemService.updateOrderItem(id, orderItemDto));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         orderItemService.deleteOrderItemById(id);
         return ResponseEntity.noContent().build();

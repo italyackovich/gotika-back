@@ -28,28 +28,28 @@ public class DishController {
         return ResponseEntity.ok(dishService.getDishById(id));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<DishDto> createDish(@RequestBody @Valid DishDto dishDto) {
         System.out.println(dishDto);
         return ResponseEntity.ok(dishService.createDish(dishDto));
     }
 
-    @PatchMapping("/{id}/patch")
+    @PatchMapping("/{id}/data")
     public ResponseEntity<DishDto> changeDishData(@PathVariable Long id, @RequestBody @Valid DishChangeRequest dishChangeRequest) {
         return  ResponseEntity.ok(dishService.changeDishData(id, dishChangeRequest));
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<DishDto> updateDish(@PathVariable Long id, @RequestBody @Valid DishDto dishDto) {
         return ResponseEntity.ok(dishService.updateDish(id, dishDto));
     }
 
-    @PatchMapping("/{id}/change-img")
+    @PatchMapping("/{id}/images")
     public ResponseEntity<DishDto> changeImg(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(dishService.changeImage(id, file));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDish(@PathVariable Long id) {
         dishService.deleteDish(id);
         return ResponseEntity.noContent().build();

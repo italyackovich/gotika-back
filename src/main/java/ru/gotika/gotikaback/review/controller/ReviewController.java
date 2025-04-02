@@ -26,17 +26,17 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewById(id));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ReviewDto> createReview(@RequestBody @Valid ReviewDto reviewDto) {
         return ResponseEntity.ok(reviewService.createReview(reviewDto));
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody @Valid ReviewDto reviewDto) {
         return ResponseEntity.ok(reviewService.updateReview(id, reviewDto));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
         return ResponseEntity.noContent().build();

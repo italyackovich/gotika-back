@@ -32,7 +32,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
-    @GetMapping("/generate-report")
+    @GetMapping("/reports")
     public ResponseEntity<?> generateOrderReport(@RequestParam Long restaurantId) throws IOException {
         List<Order> orders = orderService.getOrdersForLastMonth(restaurantId);
         ByteArrayOutputStream outputStream = getByteArrayOutputStream(orders);
@@ -46,22 +46,22 @@ public class OrderController {
                 .body(resource);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<OrderDto> create(@RequestBody OrderDto orderDto) {
         return ResponseEntity.ok(orderService.createOrder(orderDto));
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<OrderDto> update(@PathVariable Long id, @RequestBody OrderDto orderDto) {
         return ResponseEntity.ok(orderService.updateOrder(id, orderDto));
     }
 
-    @PatchMapping("/{id}/change-status")
+    @PatchMapping("/{id}/statuses")
     public ResponseEntity<OrderDto> changeStatus(@PathVariable Long id, @RequestBody OrderStatusDto statusDto) {
         return ResponseEntity.ok(orderService.changeOrderStatus(id, statusDto));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();

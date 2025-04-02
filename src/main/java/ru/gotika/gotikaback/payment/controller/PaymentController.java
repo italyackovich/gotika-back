@@ -20,17 +20,17 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.getPayment(id));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ResponsePaymentDto> createPayment(@RequestBody RequestPaymentDto payment) {
         return ResponseEntity.ok(paymentService.createPayment(payment));
     }
 
-    @GetMapping("/confirmation")
+    @GetMapping("/confirmations")
     public ResponseEntity<ResponsePaymentDto> confirmPayment(@RequestParam String paymentId) {
         return ResponseEntity.ok(paymentService.confirmPayment(paymentId));
     }
 
-    @PostMapping("/webhook-change-status")
+    @PostMapping("/statuses")
     public ResponseEntity<String> handleYookassaWebhook(@RequestBody PaymentNotificationDto notification) {
         paymentService.webhookYooKassa(notification);
         return ResponseEntity.ok("Webhook received");

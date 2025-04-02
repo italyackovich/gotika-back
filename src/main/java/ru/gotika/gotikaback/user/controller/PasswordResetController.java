@@ -17,7 +17,7 @@ import ru.gotika.gotikaback.user.service.PasswordResetService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/users/password-reset")
+@RequestMapping("/api/v1/users/passwords")
 @Tag(name = "Password Reset", description = "API for resetting user passwords")
 public class PasswordResetController {
 
@@ -50,7 +50,7 @@ public class PasswordResetController {
                     @ApiResponse(responseCode = "500", description = "Internal server error")
             }
     )
-    @PostMapping("/request")
+    @PostMapping("/requests")
     public ResponseEntity<ChangePasswordResponse> requestReset(@RequestBody @Valid RequestResetPassword requestResetPassword) {
         return ResponseEntity.ok(passwordResetService.sendResetCode(requestResetPassword));
     }
@@ -82,7 +82,7 @@ public class PasswordResetController {
                     @ApiResponse(responseCode = "500", description = "Internal server error")
             }
     )
-    @PostMapping("/confirm")
+    @PostMapping("/confirmations")
     public ResponseEntity<ChangePasswordResponse> confirmReset(@RequestBody @Valid ConfirmResetPassword confirmResetPassword) {
         return ResponseEntity.ok(passwordResetService.validateResetCode(confirmResetPassword));
     }
@@ -114,7 +114,7 @@ public class PasswordResetController {
                     @ApiResponse(responseCode = "500", description = "Internal server error")
             }
     )
-    @PostMapping("/reset")
+    @PostMapping("/resetting")
     public ResponseEntity<ChangePasswordResponse> passwordReset(@RequestBody @Valid ChangePassword changePassword) {
         return ResponseEntity.ok(passwordResetService.resetPassword(changePassword));
     }

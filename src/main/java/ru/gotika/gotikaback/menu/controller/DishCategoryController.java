@@ -26,17 +26,17 @@ public class DishCategoryController {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<DishCategoryDto> createCategory(@RequestBody @Valid DishCategoryDto categoryDto) {
         return ResponseEntity.ok(categoryService.createCategory(categoryDto));
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<DishCategoryDto> updateCategory(@PathVariable Long id, @RequestBody @Valid DishCategoryDto categoryDto) {
         return ResponseEntity.ok(categoryService.updateCategory(id, categoryDto));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();

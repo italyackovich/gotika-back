@@ -29,28 +29,28 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.getRestaurant(id));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ResponseRestaurantDto> createRestaurant(@RequestBody @Valid RequestRestaurantDto restaurantDto) {
         return ResponseEntity.ok(restaurantService.createRestaurant(restaurantDto));
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<ResponseRestaurantDto> updateRestaurant(@PathVariable Long id, @RequestBody @Valid RequestRestaurantDto restaurantDto) {
         return ResponseEntity.ok(restaurantService.updateRestaurant(id, restaurantDto));
     }
 
-    @PatchMapping("/{id}/ch-desc")
+    @PatchMapping("/{id}/data")
     public ResponseEntity<ResponseRestaurantDto> changeDesc(@PathVariable Long id, @RequestBody @Valid ChangeRestaurantDescDto changeRequest) {
         return ResponseEntity.ok(restaurantService.changeDesc(id, changeRequest));
     }
 
 
-    @PatchMapping("/{id}/ch-img")
+    @PatchMapping("/{id}/images")
     public ResponseEntity<ResponseRestaurantDto> changeImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(restaurantService.changeImage(id, file));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id) {
         restaurantService.deleteRestaurant(id);
         return ResponseEntity.noContent().build();
